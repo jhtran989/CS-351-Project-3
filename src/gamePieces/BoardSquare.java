@@ -6,4 +6,9 @@ public class BoardSquare {
     public BoardSquare(String square) {
         this.square = square;
     }
+
+    @Override
+    public String toString() {
+        return square;
+    }
 }

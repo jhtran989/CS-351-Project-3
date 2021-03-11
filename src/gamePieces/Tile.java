@@ -8,4 +8,13 @@ public class Tile {
         this.letter = letter;
         this.value = value;
     }
+
+    public char getLetter() {
+        return letter;
+    }
+
+    @Override
+    public String toString() {
+        return "" + letter + " " + value;
+    }
 }
