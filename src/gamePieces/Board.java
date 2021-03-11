@@ -10,20 +10,24 @@ import utilities.CyclicIndexer;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Board {
     private int dimension;
     private Map<Tile, Integer> frequencyTile;
     private BoardSquare[][] boardSquareArray;
     private InputChoice inputChoice;
+    private List<WordInPlay> wordInPlayList;
+    private int firstLetterIndex;
+    private int lastLetterIndex;
+    private int rowColumnIndex;
+    private List<BoardSquare> anchorBoardSquares;
 
     public Board(InputChoice inputChoice) {
         this.inputChoice = inputChoice;
         frequencyTile = new TreeMap<>(new TileComparator());
+        wordInPlayList = new ArrayList<>();
+        anchorBoardSquares = new ArrayList<>();
 
         if (this.inputChoice == InputChoice.FILE) {
             String boardFilePath = "resources/scrabble_board.txt";
@@ -49,14 +53,31 @@ public class Board {
 //        printTiles();
 //    }
 
-    public List<WordInPlay> findWordsInPlay() {
+    private void findAnchorBoardSquares() {
+        for (WordInPlay wordInPlay : wordInPlayList) {
+            firstLetterIndex = wordInPlay.getFirstIndex();
+            lastLetterIndex = wordInPlay.getLastIndex();
+            rowColumnIndex = wordInPlay.getRowColumnIndex();
+
+            if (wordInPlay.getPlayDirection() == PlayDirection.HORIZONTAL) {
+
+                anchorBoardSquares.add(boardSquareArray[][]);
+            }
+        }
+    }
+
+    public void findWordsInPlay() {
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
                 BoardSquare currentBoardSquare = boardSquareArray[i][j];
                 if (currentBoardSquare.getBoardSquareType()
                         == BoardSquareType.LETTER) {
                     if (currentBoardSquare.isHorizontalCheck()) {
-
+                        checkLetterDirection(PlayDirection.HORIZONTAL,
+                                currentBoardSquare);
+                    } else if (currentBoardSquare.isVerticalCheck()) {
+                        checkLetterDirection(PlayDirection.VERTICAL,
+                                currentBoardSquare);
                     }
                 }
             }
@@ -65,69 +86,163 @@ public class Board {
 
     // FIXME: use the correction from the CheckDirection instead (also, maybe
     //  put an error to the cyclic indexer...)
-    private WordInPlay checkLetterDirection(PlayDirection playDirection,
+
+    /**
+     * Assuming there's no one letter word
+     * Also, the letters are formed from left to right or top to bottom (only
+     * one direction to check for each axis -- horizontal or vertical,
+     * respectively)
+     * @param playDirection
+     * @param boardSquare
+     */
+    private void checkLetterDirection(PlayDirection playDirection,
                                             BoardSquare boardSquare) {
+        String temporaryWord = "" + boardSquare.getLetter();
+
         if (playDirection == PlayDirection.HORIZONTAL) {
-            int leftIndex;
-            int rightIndex;
-            int rowIndex = boardSquare.getRowIndex();
+            firstLetterIndex = boardSquare.getColumnIndex();
+            lastLetterIndex = firstLetterIndex;
+            rowColumnIndex = boardSquare.getRowIndex();
 
-            leftIndex = boardSquare.getColumnIndex();
-            rightIndex = boardSquare.getColumnIndex();
-
-            boolean edgeLeftLetter = false;
-            boolean edgeRightLetter = false;
-
-            while (boardSquareArray[rowIndex][leftIndex].getBoardSquareType()
+            int nextLetterIndex = CyclicIndexer.findCyclicIndex(
+                    lastLetterIndex,
+                    CheckDirection.RIGHT.getRowCorrection(),
+                    dimension - 1);
+            while (getNextBoardSquareType(CheckDirection.RIGHT)
                     == BoardSquareType.LETTER) {
-                if (leftIndex == 0) {
-                    edgeLeftLetter = true;
+                applyPlayDirectionCorrection(CheckDirection.RIGHT);
+                temporaryWord +=
+                        boardSquareArray[rowColumnIndex][nextLetterIndex]
+                                .getLetter();
+
+                if (nextLetterIndex == dimension - 1) {
                     break;
-                } else {
-                    leftIndex--;
                 }
             }
-
-            while (boardSquareArray[rowIndex][rightIndex].getBoardSquareType()
-                    == BoardSquareType.LETTER) {
-                if (rightIndex == dimension - 1) {
-                    edgeRightLetter = true;
-                    break;
-                } else {
-                    rightIndex++;
-                }
-            }
-
-            if (!edgeLeftLetter) {
-                leftIndex += 1;
-            }
-
-            if (!edgeRightLetter) {
-                rightIndex -= 1;
-            }
-
-            return new WordInPlay(playDirection, )
         } else {
+            firstLetterIndex = boardSquare.getRowIndex();
+            lastLetterIndex = firstLetterIndex;
+            rowColumnIndex = boardSquare.getColumnIndex();
 
+            int nextLetterIndex = CyclicIndexer.findCyclicIndex(
+                    lastLetterIndex,
+                    CheckDirection.DOWN.getRowCorrection(), dimension + 1);
+            while (getNextBoardSquareType(CheckDirection.DOWN)
+                    == BoardSquareType.LETTER) {
+                applyPlayDirectionCorrection(CheckDirection.DOWN);
+                temporaryWord +=
+                        boardSquareArray[rowColumnIndex][nextLetterIndex]
+                                .getLetter();
+
+                if (nextLetterIndex == dimension - 1) {
+                    break;
+                }
+            }
         }
+
+        if (firstLetterIndex != lastLetterIndex) {
+            wordInPlayList.add(new WordInPlay(playDirection,
+                    temporaryWord, firstLetterIndex,
+                    lastLetterIndex, rowColumnIndex));
+        }
+
+
+//        if (playDirection == PlayDirection.HORIZONTAL) {
+//            int currentLeftIndex;
+//            int currentRightIndex;
+//            int rowIndex = boardSquare.getRowIndex();
+//
+//            currentLeftIndex = boardSquare.getColumnIndex();
+//            currentRightIndex = boardSquare.getColumnIndex();
+//
+//            int nextLeftIndex = currentLeftIndex - 1;
+//            int nextRightIndex = currentRightIndex + 1;
+//
+//            while (boardSquareArray[rowIndex][nextLeftIndex]
+//                    .getBoardSquareType() == BoardSquareType.LETTER) {
+//                if (nextLeftIndex == 0) {
+//                    applyPlayDirectionCorrection(CheckDirection.LEFT,
+//                            boardSquare);
+//                    break;
+//                }
+//
+//                applyPlayDirectionCorrection(CheckDirection.LEFT,
+//                        boardSquare);
+//                nextLeftIndex--;
+//            }
+//
+//            while (boardSquareArray[rowIndex][nextRightIndex]
+//                    .getBoardSquareType() == BoardSquareType.LETTER) {
+//                if (nextRightIndex == dimension - 1) {
+//                    break;
+//                }
+//
+//                applyPlayDirectionCorrection(CheckDirection.RIGHT,
+//                        boardSquare);
+//                nextRightIndex++;
+//            }
+//
+//
+//
+//
+//            return new WordInPlay(playDirection, )
+//        } else {
+//
+//        }
     }
 
     private BoardSquareType getNextBoardSquareType(
-            CheckDirection checkDirection, BoardSquare boardSquare) {
-        int currentRowIndex = boardSquare.getRowIndex();
-        int currentColumnIndex = boardSquare.getColumnIndex();
+            CheckDirection checkDirection) {
         int rowCorrection = checkDirection.getRowCorrection();
         int columnCorrection = checkDirection.getColumnCorrection();
 
         int newRowIndex = CyclicIndexer.findCyclicIndex(
-                currentRowIndex,
+                lastLetterIndex,
                 rowCorrection, dimension);
         int newColumnIndex = CyclicIndexer.findCyclicIndex(
-                currentColumnIndex,
+                lastLetterIndex,
                 columnCorrection, dimension);
 
         return boardSquareArray[newRowIndex][newColumnIndex].
                 getBoardSquareType();
+    }
+
+//    private BoardSquareType getNextBoardSquareType(
+//            CheckDirection checkDirection, BoardSquare boardSquare) {
+//        int currentRowIndex = boardSquare.getRowIndex();
+//        int currentColumnIndex = boardSquare.getColumnIndex();
+//        int rowCorrection = checkDirection.getRowCorrection();
+//        int columnCorrection = checkDirection.getColumnCorrection();
+//
+//        int newRowIndex = CyclicIndexer.findCyclicIndex(
+//                currentRowIndex,
+//                rowCorrection, dimension);
+//        int newColumnIndex = CyclicIndexer.findCyclicIndex(
+//                currentColumnIndex,
+//                columnCorrection, dimension);
+//
+//        return boardSquareArray[newRowIndex][newColumnIndex].
+//                getBoardSquareType();
+//    }
+
+//    private void applyPlayDirectionCorrection(
+//            CheckDirection checkDirection, BoardSquare boardSquare) {
+//        boardSquare.setRowIndex(
+//                boardSquare.getRowIndex() + checkDirection.getRowCorrection());
+//        boardSquare.setColumnIndex(
+//                boardSquare.getColumnIndex() +
+//                        checkDirection.getColumnCorrection());
+//
+//
+//    }
+
+    private void applyPlayDirectionCorrection(
+            CheckDirection checkDirection) {
+        if (checkDirection == CheckDirection.RIGHT) {
+            lastLetterIndex += checkDirection.getRowCorrection();
+        } else if (checkDirection == CheckDirection.DOWN) {
+            lastLetterIndex += checkDirection.getColumnCorrection();
+        }
     }
 
     private void setupBoard(String filePath) {

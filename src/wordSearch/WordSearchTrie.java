@@ -5,11 +5,11 @@ import java.io.FileReader;
 import java.util.Map;
 import java.util.Scanner;
 
-public class WordSearchTree {
+public class WordSearchTrie {
     private CharacterNode root;
     private CharacterNode currentNode;
 
-    public WordSearchTree() {
+    public WordSearchTrie() {
         initializeRoot();
 
         String dictionaryFilePath = "resources/sowpods.txt";
@@ -31,6 +31,8 @@ public class WordSearchTree {
             }
             childNode = currentNode.addChild(childNode);
             addWord(word.substring(1), childNode);
+        } else {
+            currentNode.activateTerminalNode();
         }
     }
 

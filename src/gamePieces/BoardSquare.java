@@ -3,7 +3,8 @@ package gamePieces;
 import constants.BoardSquareType;
 
 public class BoardSquare {
-    private String square;
+    private String twoChar;
+    private Character letter;
     private BoardSquareType boardSquareType;
     private final int NUM_CHAR = 2;
     private int rowIndex;
@@ -11,14 +12,27 @@ public class BoardSquare {
     private boolean horizontalCheck;
     private boolean verticalCheck;
 
-    public BoardSquare(String square, int rowIndex, int columnIndex) {
-        this.square = square;
+    public BoardSquare(String twoChar, int rowIndex, int columnIndex) {
+        this.twoChar = twoChar;
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
+        letter = null;
 
         setBoardSquareType();
         horizontalCheck = true;
         verticalCheck = true;
+    }
+
+    public Character getLetter() {
+        return letter;
+    }
+
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
+    }
+
+    public void setColumnIndex(int columnIndex) {
+        this.columnIndex = columnIndex;
     }
 
     public int getRowIndex() {
@@ -47,7 +61,7 @@ public class BoardSquare {
 
     @Override
     public String toString() {
-        return square;
+        return twoChar;
     }
 
     /**
@@ -55,8 +69,8 @@ public class BoardSquare {
      * valid forms described in the rubric)
      */
     private void setBoardSquareType() {
-        char firstChar = square.charAt(0);
-        char secondChar = square.charAt(1);
+        char firstChar = twoChar.charAt(0);
+        char secondChar = twoChar.charAt(1);
 
         if (firstChar != '.') {
             if (firstChar == '2') {
@@ -66,6 +80,7 @@ public class BoardSquare {
             } else { // has to be a space, which means this square represents
                 // a letter
                 boardSquareType = BoardSquareType.LETTER;
+                letter = secondChar;
             }
         } else {
             if (secondChar == '2') {

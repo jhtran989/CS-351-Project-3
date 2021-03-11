@@ -5,13 +5,19 @@ import java.util.*;
 public class CharacterNode {
     private char character;
     private Map<Character, CharacterNode> childrenMap;
+    private boolean terminalNode;
 
     public CharacterNode(char character) {
         this.character = character;
+        terminalNode = false;
     }
 
     // Only used for the construction of the root node in the tree
     public CharacterNode() {
+    }
+
+    public void activateTerminalNode() {
+        terminalNode = true;
     }
 
     public CharacterNode addChild(CharacterNode childNode) {
