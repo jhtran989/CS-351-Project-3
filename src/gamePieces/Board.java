@@ -1,32 +1,133 @@
 package gamePieces;
 
+import constants.BoardSquareType;
+import constants.CheckDirection;
+import constants.InputChoice;
+import constants.PlayDirection;
 import exceptions.InputErrorException;
 import utilities.CustomParser;
+import utilities.CyclicIndexer;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 public class Board {
+    private int dimension;
     private Map<Tile, Integer> frequencyTile;
     private BoardSquare[][] boardSquareArray;
-    private int dimension;
+    private InputChoice inputChoice;
 
-    public Board(int dimension) {
-        this.dimension = dimension;
+    public Board(InputChoice inputChoice) {
+        this.inputChoice = inputChoice;
         frequencyTile = new TreeMap<>(new TileComparator());
 
-        String boardFilePath = "resources/scrabble_board.txt";
-        String tilesFilePath = "resources/scrabble_tiles.txt";
-        setupBoard(boardFilePath);
-        setupTiles(tilesFilePath);
+        if (this.inputChoice == InputChoice.FILE) {
+            String boardFilePath = "resources/scrabble_board.txt";
+            String tilesFilePath = "resources/scrabble_tiles.txt";
+            setupBoard(boardFilePath);
+            setupTiles(tilesFilePath);
+        } else {
+            setupBoard();
+            setupTiles();
+        }
 
         printBoard();
         printTiles();
+    }
+
+//    public Board() {
+//        frequencyTile = new TreeMap<>(new TileComparator());
+//
+//        setupBoard();
+//        setupTiles();
+//
+//        printBoard();
+//        printTiles();
+//    }
+
+    public List<WordInPlay> findWordsInPlay() {
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+                BoardSquare currentBoardSquare = boardSquareArray[i][j];
+                if (currentBoardSquare.getBoardSquareType()
+                        == BoardSquareType.LETTER) {
+                    if (currentBoardSquare.isHorizontalCheck()) {
+
+                    }
+                }
+            }
+        }
+    }
+
+    // FIXME: use the correction from the CheckDirection instead (also, maybe
+    //  put an error to the cyclic indexer...)
+    private WordInPlay checkLetterDirection(PlayDirection playDirection,
+                                            BoardSquare boardSquare) {
+        if (playDirection == PlayDirection.HORIZONTAL) {
+            int leftIndex;
+            int rightIndex;
+            int rowIndex = boardSquare.getRowIndex();
+
+            leftIndex = boardSquare.getColumnIndex();
+            rightIndex = boardSquare.getColumnIndex();
+
+            boolean edgeLeftLetter = false;
+            boolean edgeRightLetter = false;
+
+            while (boardSquareArray[rowIndex][leftIndex].getBoardSquareType()
+                    == BoardSquareType.LETTER) {
+                if (leftIndex == 0) {
+                    edgeLeftLetter = true;
+                    break;
+                } else {
+                    leftIndex--;
+                }
+            }
+
+            while (boardSquareArray[rowIndex][rightIndex].getBoardSquareType()
+                    == BoardSquareType.LETTER) {
+                if (rightIndex == dimension - 1) {
+                    edgeRightLetter = true;
+                    break;
+                } else {
+                    rightIndex++;
+                }
+            }
+
+            if (!edgeLeftLetter) {
+                leftIndex += 1;
+            }
+
+            if (!edgeRightLetter) {
+                rightIndex -= 1;
+            }
+
+            return new WordInPlay(playDirection, )
+        } else {
+
+        }
+    }
+
+    private BoardSquareType getNextBoardSquareType(
+            CheckDirection checkDirection, BoardSquare boardSquare) {
+        int currentRowIndex = boardSquare.getRowIndex();
+        int currentColumnIndex = boardSquare.getColumnIndex();
+        int rowCorrection = checkDirection.getRowCorrection();
+        int columnCorrection = checkDirection.getColumnCorrection();
+
+        int newRowIndex = CyclicIndexer.findCyclicIndex(
+                currentRowIndex,
+                rowCorrection, dimension);
+        int newColumnIndex = CyclicIndexer.findCyclicIndex(
+                currentColumnIndex,
+                columnCorrection, dimension);
+
+        return boardSquareArray[newRowIndex][newColumnIndex].
+                getBoardSquareType();
     }
 
     private void setupBoard(String filePath) {
@@ -37,7 +138,7 @@ public class Board {
             for (int i = 0; i < dimension; i++) {
                 for (int j = 0; j < dimension; j++) {
                     boardSquareArray[i][j] = new BoardSquare(
-                            scanner.next());
+                            scanner.next(), i, j);
                 }
 
                 scanner.nextLine();
@@ -55,7 +156,7 @@ public class Board {
             for (int i = 0; i < dimension; i++) {
                 for (int j = 0; j < dimension; j++) {
                     boardSquareArray[i][j] = new BoardSquare(
-                            scanner.next());
+                            scanner.next(), i, j);
                 }
 
                 scanner.nextLine();

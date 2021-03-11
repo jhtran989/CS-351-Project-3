@@ -1,11 +1,10 @@
 package gamePieces;
 
-import java.util.Set;
-import java.util.TreeSet;
+import constants.InputChoice;
 
 public class MainGamePieces {
     public static void main(String[] args) {
-        Board board = new Board(15);
+        Board board = new Board(InputChoice.CONSOLE);
 
 //        Set<Tile> tiles = new TreeSet<>(new TileComparator());
 //        tiles.add(new Tile('a', 1));
