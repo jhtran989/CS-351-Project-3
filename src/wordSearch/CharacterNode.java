@@ -6,6 +6,7 @@ public class CharacterNode {
     private char character;
     private Map<Character, CharacterNode> childrenMap;
     private boolean terminalNode;
+    private int level;
 
     public CharacterNode(char character) {
         this.character = character;
@@ -20,7 +21,19 @@ public class CharacterNode {
         terminalNode = true;
     }
 
-    public CharacterNode addChild(CharacterNode childNode) {
+    public boolean isTerminalNode() {
+        return terminalNode;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public CharacterNode getChildNode(char currentChar) {
+        return childrenMap.get(currentChar);
+    }
+
+    public CharacterNode addChild(CharacterNode childNode, int level) {
         if (childrenMap == null) {
             childrenMap = new TreeMap<>();
         }
@@ -29,10 +42,11 @@ public class CharacterNode {
         CharacterNode currentChildNode = childrenMap.get(childCharacter);
 
         if (currentChildNode == null) {
-            if (MainWordSearch.DEBUG) {
-                System.out.println("Creating..." + childCharacter);
-            }
+//            if (MainWordSearch.DEBUG) {
+//                System.out.println("Creating..." + childCharacter);
+//            }
             currentChildNode = childNode;
+            this.level = level;
         }
 
         childrenMap.put(childCharacter, currentChildNode);

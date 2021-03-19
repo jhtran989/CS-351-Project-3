@@ -60,8 +60,8 @@ public class Board {
             rowColumnIndex = wordInPlay.getRowColumnIndex();
 
             if (wordInPlay.getPlayDirection() == PlayDirection.HORIZONTAL) {
-
-                anchorBoardSquares.add(boardSquareArray[][]);
+                //FIXME
+                //anchorBoardSquares.add(boardSquareArray[][]);
             }
         }
     }

@@ -7,30 +7,65 @@ import java.util.Scanner;
 
 public class WordSearchTrie {
     private CharacterNode root;
-    private CharacterNode currentNode;
 
-    public WordSearchTrie() {
+    public WordSearchTrie(String dictionaryFilePath) {
         initializeRoot();
 
-        String dictionaryFilePath = "resources/sowpods.txt";
         setupWordSearchTree(dictionaryFilePath);
-        if (MainWordSearch.DEBUG) {
-            printTree();
-        }
+
+//        if (MainWordSearch.DEBUG) {
+//            printTree();
+//        }
     }
 
+    /**
+     * The root node is "empty" - the formation of character nodes start
+     * after the root node
+     */
     private void initializeRoot() {
         root = new CharacterNode();
     }
 
-    private void addWord(String word, CharacterNode currentNode) {
+    private boolean searchWord(String word, CharacterNode currentNode) {
         if (word.length() > 0) {
-            CharacterNode childNode = new CharacterNode(word.charAt(0));
+            char currentChar = word.charAt(0);
+
             if (MainWordSearch.DEBUG) {
-                System.out.println("current char: " + word.charAt(0));
+                System.out.println("Current char: " + currentChar + " (level" +
+                        " " + currentNode.getLevel() + ")");
             }
-            childNode = currentNode.addChild(childNode);
-            addWord(word.substring(1), childNode);
+
+            CharacterNode searchNode =
+                    currentNode.getChildNode(currentChar);
+
+            if (searchNode != null) {
+                return searchWord(word.substring(1),
+                        searchNode);
+            } else {
+                return false;
+            }
+        } else {
+            return currentNode.isTerminalNode();
+        }
+    }
+
+    public boolean searchWord(String word) {
+        return searchWord(word, root);
+    }
+
+    private void addWord(String word, CharacterNode currentNode, int level) {
+        if (word.length() > 0) {
+            level++;
+
+            CharacterNode childNode = new CharacterNode(word.charAt(0));
+
+//            if (MainWordSearch.DEBUG) {
+//                System.out.println("current char: " + word.charAt(0));
+//            }
+
+            childNode = currentNode.addChild(childNode, level);
+            addWord(word.substring(1), childNode,
+                    level);
         } else {
             currentNode.activateTerminalNode();
         }
@@ -38,7 +73,8 @@ public class WordSearchTrie {
 
     // Wrapper method for the one above (so root stays internal to the class)
     private void addWord(String word) {
-        addWord(word, root);
+        int level = 0;
+        addWord(word, root, level);
     }
 
     private void setupWordSearchTree(String filePath) {
@@ -48,9 +84,11 @@ public class WordSearchTrie {
                 new FileReader(filePath))) {
             while (scanner.hasNext()) {
                 String word = scanner.next();
-                if (MainWordSearch.DEBUG) {
-                    System.out.println("word: " + word);
-                }
+
+//                if (MainWordSearch.DEBUG) {
+//                    System.out.println("word: " + word);
+//                }
+
                 addWord(word);
             }
         } catch (FileNotFoundException fileNotFoundException) {
@@ -84,6 +122,12 @@ public class WordSearchTrie {
                 //childNode.printChildren();
                 printTree(childNode);
             }
+        }
+    }
+
+    public void printRoot() {
+        if (MainWordSearch.DEBUG) {
+            root.printChildren();
         }
     }
 
