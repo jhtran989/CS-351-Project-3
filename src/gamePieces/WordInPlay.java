@@ -37,4 +37,10 @@ public class WordInPlay {
     public int getRowColumnIndex() {
         return rowColumnIndex;
     }
+
+    @Override
+    public String toString() {
+        return "first index: " + firstIndex + ", last index: " + lastIndex +
+                ", word: " + word;
+    }
 }
