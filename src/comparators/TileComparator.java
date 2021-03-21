@@ -1,4 +1,6 @@
-package gamePieces;
+package comparators;
+
+import gamePieces.Tile;
 
 import java.util.Comparator;
 

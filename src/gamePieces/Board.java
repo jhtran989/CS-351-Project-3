@@ -1,5 +1,6 @@
 package gamePieces;
 
+import comparators.TileComparator;
 import constants.*;
 import exceptions.InputErrorException;
 import utilities.CustomParser;
@@ -61,21 +62,154 @@ public class Board {
             rowColumnIndex = wordInPlay.getRowColumnIndex();
 
             BoardSquare firstBoardSquare;
-            BoardSquare lastBoardSquare;
 
-            if (wordInPlay.getPlayDirection() == PlayDirection.HORIZONTAL) {
-                //FIXME
-                //anchorBoardSquares.add(boardSquareArray[][]);
-                firstBoardSquare =
-                        boardSquareArray[rowColumnIndex][firstLetterIndex];
-                lastBoardSquare =
-                        boardSquareArray[rowColumnIndex][lastLetterIndex];
+            List<BoardSquare> wordBoardSquareList = new ArrayList<>();
+            PlayDirection wordPlayDirection = wordInPlay.getPlayDirection();
 
-                BoardSquareType
-            } else {
+            for (int letterIndex = firstLetterIndex;
+                 letterIndex <= lastLetterIndex; letterIndex++) {
+                if (wordPlayDirection == PlayDirection.HORIZONTAL) {
+                    wordBoardSquareList.add(
+                            boardSquareArray[rowColumnIndex][letterIndex]);
+                } else {
+                    wordBoardSquareList.add(
+                            boardSquareArray[letterIndex][rowColumnIndex]);
+                }
+            }
+
+            boolean first = true;
+            for (BoardSquare boardSquare : wordBoardSquareList) {
+                if (first) {
+                    addAnchorSquare(boardSquare,
+                            wordPlayDirection,
+                            AnchorType.PRIMARY_HEAD,
+                            AnchorType.SECONDARY_BODY);
+
+                    first = false;
+                } else {
+                    addAnchorSquare(boardSquare,
+                            wordPlayDirection,
+                            null,
+                            AnchorType.SECONDARY_BODY);
+                }
+            }
+
+            first = true;
+            for (BoardSquare boardSquare : wordBoardSquareList) {
+                BoardSquare firstHeadBoardSquare =
+                        getBoardSquareInCheckDirection(
+                                boardSquare,
+                                wordPlayDirection
+                                        .getCheckDirection());
+
+                if (firstHeadBoardSquare == null) {
+                    break;
+                }
+
+                if (first) {
+                    addAnchorSquare(firstHeadBoardSquare,
+                            wordPlayDirection,
+                            AnchorType.PRIMARY_HEAD,
+                            null);
+
+                    first = false;
+                } else {
+                    addAnchorSquare(firstHeadBoardSquare,
+                            wordPlayDirection,
+                            AnchorType.PRIMARY_BODY,
+                            null);
+                }
+            }
+
+            first = true;
+            for (BoardSquare boardSquare : wordBoardSquareList) {
+                BoardSquare secondHeadBoardSquare =
+                        getBoardSquareInCheckDirection(
+                                boardSquare,
+                                wordPlayDirection
+                                        .getReverseCheckDirection());
+
+                if (secondHeadBoardSquare == null) {
+                    break;
+                }
+
+                if (first) {
+                    addAnchorSquare(secondHeadBoardSquare,
+                            wordPlayDirection,
+                            AnchorType.PRIMARY_HEAD,
+                            null);
+                    first = false;
+                } else {
+                    addAnchorSquare(boardSquare,
+                            wordPlayDirection,
+                            AnchorType.PRIMARY_BODY,
+                            null);
+                }
+            }
+
+            if () {
 
             }
         }
+    }
+
+    /**
+     * Gets the board square in the said direction relative to a given
+     * board square
+     *
+     * @param boardSquare
+     * @param checkDirection
+     * @return
+     */
+    private BoardSquare getBoardSquareInCheckDirection(BoardSquare boardSquare,
+                                       CheckDirection checkDirection) {
+        if (checkDirection == CheckDirection.UP) {
+            if (!boardSquare.isTopEdge()) {
+                return boardSquareArray[boardSquare.getRowIndex() - 1]
+                        [boardSquare.getColumnIndex()];
+            }
+        } else if (checkDirection == CheckDirection.DOWN) {
+            if (!boardSquare.isBottomEdge()) {
+                return boardSquareArray[boardSquare.getRowIndex() + 1]
+                        [boardSquare.getColumnIndex()];
+            }
+        } else if (checkDirection == CheckDirection.LEFT) {
+            if (!boardSquare.isLeftEdge()) {
+                return boardSquareArray[boardSquare.getRowIndex()]
+                        [boardSquare.getColumnIndex() - 1];
+            }
+        } else { // Right
+            if (!boardSquare.isRightEdge()) {
+                return boardSquareArray[boardSquare.getRowIndex()]
+                        [boardSquare.getColumnIndex() + 1];
+            }
+        }
+
+        return null;
+    }
+
+    private void addAnchorSquare(int rowIndex, int columnIndex,
+                                 PlayDirection wordPlayDirection,
+                                 AnchorType primaryAnchorType,
+                                 AnchorType secondaryAnchorType) {
+        BoardSquare boardSquare = boardSquareArray[rowIndex][columnIndex];
+        boardSquare.setAnchor(new Anchor(wordPlayDirection,
+                primaryAnchorType,
+                secondaryAnchorType));
+        anchorBoardSquares.add(boardSquare);
+    }
+
+    private void addAnchorSquare(BoardSquare boardSquare,
+                                 PlayDirection wordPlayDirection,
+                                 AnchorType primaryAnchorType,
+                                 AnchorType secondaryAnchorType) {
+        if (boardSquare.getBoardSquareType()) {
+
+        }
+        boardSquare.setAnchor(new Anchor(wordPlayDirection,
+                primaryAnchorType,
+                secondaryAnchorType));
+        anchorBoardSquares.add(boardSquare);
     }
 
     public void findWordsInPlay() {
@@ -310,7 +444,8 @@ public class Board {
             for (int i = 0; i < dimension; i++) {
                 for (int j = 0; j < dimension; j++) {
                     boardSquareArray[i][j] = new BoardSquare(
-                            scanner.next(), i, j);
+                            scanner.next(), i, j,
+                            dimension);
                 }
 
                 scanner.nextLine();
@@ -328,7 +463,8 @@ public class Board {
             for (int i = 0; i < dimension; i++) {
                 for (int j = 0; j < dimension; j++) {
                     boardSquareArray[i][j] = new BoardSquare(
-                            scanner.next(), i, j);
+                            scanner.next(), i, j,
+                            dimension);
                 }
 
                 scanner.nextLine();

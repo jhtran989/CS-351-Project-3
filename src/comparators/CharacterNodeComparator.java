@@ -1,4 +1,6 @@
-package wordSearch;
+package comparators;
+
+import wordSearch.CharacterNode;
 
 import java.util.Comparator;
 

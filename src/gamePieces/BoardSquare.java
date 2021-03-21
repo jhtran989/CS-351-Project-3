@@ -11,16 +11,64 @@ public class BoardSquare {
     private int columnIndex;
     private boolean horizontalCheck;
     private boolean verticalCheck;
+    private Anchor anchor;
+    private int dimension;
+    private boolean topEdge;
+    private boolean bottomEdge;
+    private boolean rightEdge;
+    private boolean leftEdge;
 
-    public BoardSquare(String twoChar, int rowIndex, int columnIndex) {
+    public BoardSquare(String twoChar, int rowIndex, int columnIndex,
+                       int dimension) {
         this.twoChar = twoChar;
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
+        this.dimension = dimension;
         letter = null;
 
         setBoardSquareType();
         horizontalCheck = true;
         verticalCheck = true;
+
+        anchor = null;
+
+        if (rowIndex == 0) {
+            topEdge = true;
+        } else if (rowIndex == dimension - 1) {
+            bottomEdge = true;
+        }
+
+        if (columnIndex == 0) {
+            leftEdge = true;
+        } else if (columnIndex == dimension - 1) {
+            rightEdge = true;
+        }
+    }
+
+
+
+    public boolean isTopEdge() {
+        return topEdge;
+    }
+
+    public boolean isBottomEdge() {
+        return bottomEdge;
+    }
+
+    public boolean isRightEdge() {
+        return rightEdge;
+    }
+
+    public boolean isLeftEdge() {
+        return leftEdge;
+    }
+
+    public void setAnchor(Anchor anchor) {
+        this.anchor = anchor;
+    }
+
+    public Anchor getAnchor() {
+        return anchor;
     }
 
     public Character getLetter() {
