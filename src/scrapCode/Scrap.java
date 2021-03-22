@@ -1,15 +1,225 @@
 package scrapCode;
 
 import constants.AnchorType;
+import constants.BoardSquareType;
 import constants.CheckDirection;
 import constants.PlayDirection;
 import gamePieces.BoardSquare;
+import gamePieces.MainGamePieces;
 import gamePieces.WordInPlay;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Scrap {
+
+    /**
+     //     * Returns the next BoardSquareType in the specified CheckDirection
+     //     *
+     //     * @param checkDirection direction to get the next Tile
+     //     * @return BoardType of the next Tile in the specified CheckDirection;
+     //     * returns null if the edge of the board is reached
+     //     */
+//    private BoardSquareType getBoardSquareTypeInCheckDirection(
+//            CheckDirection checkDirection) {
+//        int rowCorrection = checkDirection.getRowCorrection();
+//        int columnCorrection = checkDirection.getColumnCorrection();
+//
+//        IndexCode rowIndexCode =
+//                CyclicIndexer.findAbsoluteIndex(lastLetterIndex,
+//                rowCorrection, dimension);
+//        IndexCode columnIndexCode = CyclicIndexer.findAbsoluteIndex(
+//                lastLetterIndex,
+//                columnCorrection, dimension);
+//
+//        if (rowIndexCode == IndexCode.OUT_OF_BOUNDS
+//                || columnIndexCode == IndexCode.OUT_OF_BOUNDS) {
+//            return null;
+//        } else {
+//            int newRowIndex = rowIndexCode.getIndex();
+//            int newColumnIndex = columnIndexCode.getIndex();
+//
+//            return boardSquareArray[newRowIndex][newColumnIndex].
+//                    getBoardSquareType();
+//        }
+//    }
+
+    //    private void applyPlayDirectionCorrection(
+//            CheckDirection checkDirection) {
+//        if (checkDirection == CheckDirection.RIGHT) {
+//            lastLetterIndex += checkDirection.getRowCorrection();
+//        } else if (checkDirection == CheckDirection.DOWN) {
+//            lastLetterIndex += checkDirection.getColumnCorrection();
+//        }
+//    }
+
+    //    private BoardSquareType getNextBoardSquareType(
+//            CheckDirection checkDirection, BoardSquare boardSquare) {
+//        int currentRowIndex = boardSquare.getRowIndex();
+//        int currentColumnIndex = boardSquare.getColumnIndex();
+//        int rowCorrection = checkDirection.getRowCorrection();
+//        int columnCorrection = checkDirection.getColumnCorrection();
+//
+//        int newRowIndex = CyclicIndexer.findCyclicIndex(
+//                currentRowIndex,
+//                rowCorrection, dimension);
+//        int newColumnIndex = CyclicIndexer.findCyclicIndex(
+//                currentColumnIndex,
+//                columnCorrection, dimension);
+//
+//        return boardSquareArray[newRowIndex][newColumnIndex].
+//                getBoardSquareType();
+//    }
+
+//    private void applyPlayDirectionCorrection(
+//            CheckDirection checkDirection, BoardSquare boardSquare) {
+//        boardSquare.setRowIndex(
+//                boardSquare.getRowIndex() + checkDirection.getRowCorrection());
+//        boardSquare.setColumnIndex(
+//                boardSquare.getColumnIndex() +
+//                        checkDirection.getColumnCorrection());
+//
+//
+//    }
+
+//        for (BoardSquare anchorBoardSquare : anchorBoardSquares) {
+//            Anchor currentAnchor = anchorBoardSquare.getAnchor();
+//            if (currentAnchor.getPrimaryAnchorType() != null) {
+//                currentAnchor.setLeftLimit(findLeftLimitAnchor(anchorBoardSquare, pla));
+//            }
+//        }
+
+    //    private void addAnchorSquare(int rowIndex, int columnIndex,
+//                                 PlayDirection wordPlayDirection,
+//                                 AnchorType primaryAnchorType,
+//                                 AnchorType secondaryAnchorType) {
+//        BoardSquare boardSquare = boardSquareArray[rowIndex][columnIndex];
+//        boardSquare.setAnchor(new Anchor(wordPlayDirection,
+//                primaryAnchorType,
+//                secondaryAnchorType));
+//        anchorBoardSquares.add(boardSquare);
+//    }
+
+//    /**
+//     * Assuming there's no one letter word
+//     * Also, the letters are formed from left to right or top to bottom (only
+//     * one direction to check for each axis -- horizontal or vertical,
+//     * respectively)
+//     * @param playDirection
+//     * @param boardSquare
+//     */
+//    private void checkWordAlongDirection(PlayDirection playDirection,
+//                                         BoardSquare boardSquare) {
+//        String temporaryWord = "" + boardSquare.getLetter();
+//        BoardSquare nextBoardSquare;
+//
+//        if (playDirection == PlayDirection.HORIZONTAL) {
+//            firstLetterIndex = boardSquare.getColumnIndex();
+//            lastLetterIndex = firstLetterIndex;
+//            rowColumnIndex = boardSquare.getRowIndex();
+//
+//            boardSquare.setHorizontalCheck(false);
+//
+////            int nextLetterIndex = CyclicIndexer.findCyclicIndex(
+////                    lastLetterIndex,
+////                    CheckDirection.RIGHT.getRowCorrection(),
+////                    dimension - 1);
+//
+//            while (getBoardSquareTypeInCheckDirection(CheckDirection.RIGHT)
+//                    == BoardSquareType.LETTER) {
+//                nextBoardSquare =
+//                        boardSquareArray[rowColumnIndex][lastLetterIndex];
+//                nextBoardSquare.setHorizontalCheck(false);
+//
+//                applyPlayDirectionCorrection(CheckDirection.RIGHT);
+//                temporaryWord += nextBoardSquare.getLetter();
+//
+////                if (nextLetterIndex == dimension - 1) {
+////                    break;
+////                }
+//            }
+//        } else {
+//            firstLetterIndex = boardSquare.getRowIndex();
+//            lastLetterIndex = firstLetterIndex;
+//            rowColumnIndex = boardSquare.getColumnIndex();
+//
+//            boardSquare.setVerticalCheck(false);
+//
+////            int nextLetterIndex = CyclicIndexer.findCyclicIndex(
+////                    lastLetterIndex,
+////                    CheckDirection.DOWN.getRowCorrection(),
+////                    dimension + 1);
+//
+//            while (getBoardSquareTypeInCheckDirection(CheckDirection.DOWN)
+//                    == BoardSquareType.LETTER) {
+//                nextBoardSquare =
+//                        boardSquareArray[lastLetterIndex][rowColumnIndex];
+//                nextBoardSquare.setVerticalCheck(false);
+//
+//                applyPlayDirectionCorrection(CheckDirection.DOWN);
+//                temporaryWord += nextBoardSquare.getLetter();
+//
+////                if (nextLetterIndex == dimension - 1) {
+////                    break;
+////                }
+//            }
+//        }
+//
+//        if (temporaryWord.length() > 1) {
+//            WordInPlay wordInPlay = new WordInPlay(playDirection,
+//                    temporaryWord, firstLetterIndex,
+//                    lastLetterIndex, rowColumnIndex);
+//            wordInPlayList.add(wordInPlay);
+//
+//            if (MainGamePieces.DEBUG) {
+//                System.out.println(wordInPlay);
+//            }
+//        }
+
+
+//        if (playDirection == PlayDirection.HORIZONTAL) {
+//            int currentLeftIndex;
+//            int currentRightIndex;
+//            int rowIndex = boardSquare.getRowIndex();
+//
+//            currentLeftIndex = boardSquare.getColumnIndex();
+//            currentRightIndex = boardSquare.getColumnIndex();
+//
+//            int nextLeftIndex = currentLeftIndex - 1;
+//            int nextRightIndex = currentRightIndex + 1;
+//
+//            while (boardSquareArray[rowIndex][nextLeftIndex]
+//                    .getBoardSquareType() == BoardSquareType.LETTER) {
+//                if (nextLeftIndex == 0) {
+//                    applyPlayDirectionCorrection(CheckDirection.LEFT,
+//                            boardSquare);
+//                    break;
+//                }
+//
+//                applyPlayDirectionCorrection(CheckDirection.LEFT,
+//                        boardSquare);
+//                nextLeftIndex--;
+//            }
+//
+//            while (boardSquareArray[rowIndex][nextRightIndex]
+//                    .getBoardSquareType() == BoardSquareType.LETTER) {
+//                if (nextRightIndex == dimension - 1) {
+//                    break;
+//                }
+//
+//                applyPlayDirectionCorrection(CheckDirection.RIGHT,
+//                        boardSquare);
+//                nextRightIndex++;
+//            }
+//
+//
+//
+//
+//            return new WordInPlay(playDirection, )
+//        } else {
+//
+//        }
+//    }
 
 //    /**
 //     * The anchor squares found depending on the orientation of the word on

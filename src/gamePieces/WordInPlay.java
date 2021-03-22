@@ -18,6 +18,16 @@ public class WordInPlay {
         this.rowColumnIndex = rowColumnIndex;
     }
 
+    // FIXME
+    public int calculateScore() {
+        return 0;
+    }
+
+    public void updateWord(char addedCharacter) {
+        word += addedCharacter;
+        lastIndex++;
+    }
+
     public PlayDirection getPlayDirection() {
         return playDirection;
     }

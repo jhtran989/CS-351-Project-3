@@ -1,6 +1,9 @@
 package gamePieces;
 
-import constants.BoardSquareType;
+import constants.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BoardSquare {
     private String twoChar;
@@ -9,14 +12,18 @@ public class BoardSquare {
     private final int NUM_CHAR = 2;
     private int rowIndex;
     private int columnIndex;
-    private boolean horizontalCheck;
-    private boolean verticalCheck;
+    private boolean wordHorizontalCheck;
+    private boolean wordVerticalCheck;
     private Anchor anchor;
     private int dimension;
     private boolean topEdge;
     private boolean bottomEdge;
     private boolean rightEdge;
     private boolean leftEdge;
+    private boolean crossCheck;
+    private List<Character> crossCheckList;
+    private boolean crossCheckHorizontal;
+    private boolean crossCheckVertical;
 
     public BoardSquare(String twoChar, int rowIndex, int columnIndex,
                        int dimension) {
@@ -27,8 +34,8 @@ public class BoardSquare {
         letter = null;
 
         setBoardSquareType();
-        horizontalCheck = true;
-        verticalCheck = true;
+        wordHorizontalCheck = true;
+        wordVerticalCheck = true;
 
         anchor = null;
 
@@ -43,9 +50,92 @@ public class BoardSquare {
         } else if (columnIndex == dimension - 1) {
             rightEdge = true;
         }
+
+        crossCheck = false;
+        crossCheckList = generateCrossCheckList();
+        crossCheckHorizontal = false;
+        crossCheckVertical = false;
     }
 
+    private List<Character> generateCrossCheckList() {
+        List<Character> copyList = new ArrayList<>();
 
+        for (int i = 'a'; i <= 'z'; i++) {
+            copyList.add((char) i);
+        }
+
+        return copyList;
+    }
+
+    public void resetCheckPlayDirection() {
+        wordHorizontalCheck = true;
+        wordVerticalCheck = true;
+    }
+
+    public void checkPlayDirection(PlayDirection playDirection) {
+        if (playDirection == PlayDirection.HORIZONTAL) {
+            wordHorizontalCheck = false;
+        } else {
+            wordVerticalCheck = false;
+        }
+    }
+
+    public void initiateCrossChecks(PlayDirection playDirection) {
+        AnchorType primaryAnchorType = anchor.getPrimaryAnchorType();
+        AnchorType secondaryAnchorType = anchor.getSecondaryAnchorType();
+
+        if (primaryAnchorType != null &&
+                primaryAnchorType.getInsideOutsideAnchor()
+                        == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
+            if (playDirection == PlayDirection.HORIZONTAL) {
+                crossCheckVertical = true;
+            } else {
+                crossCheckHorizontal = true;
+            }
+        }
+
+        if (secondaryAnchorType != null &&
+                secondaryAnchorType.getInsideOutsideAnchor()
+                        == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
+            if (playDirection == PlayDirection.HORIZONTAL) {
+                crossCheckHorizontal = true;
+            } else {
+                crossCheckVertical = true;
+            }
+        }
+    }
+
+    public boolean getCrossCheck(PlayDirection playDirection) {
+        if (playDirection == PlayDirection.HORIZONTAL) {
+            return crossCheckHorizontal;
+        } else {
+            return crossCheckVertical;
+        }
+    }
+
+    public boolean getCheckPlayDirection(PlayDirection playDirection) {
+        if (playDirection == PlayDirection.HORIZONTAL) {
+            return wordHorizontalCheck;
+        } else {
+            return wordVerticalCheck;
+        }
+    }
+
+    public boolean checkEdge(CheckDirection checkDirection) {
+        switch (checkDirection) {
+            case RIGHT:
+                return rightEdge;
+            case LEFT:
+                return leftEdge;
+            case UP:
+                return topEdge;
+            case DOWN:
+                return bottomEdge;
+            default: // shouldn't occur, but just in case checkDirection is
+                // null...
+                return false;
+        }
+    }
 
     public boolean isTopEdge() {
         return topEdge;
@@ -91,20 +181,20 @@ public class BoardSquare {
         return columnIndex;
     }
 
-    public boolean isHorizontalCheck() {
-        return horizontalCheck;
+    public boolean isWordHorizontalCheck() {
+        return wordHorizontalCheck;
     }
 
-    public boolean isVerticalCheck() {
-        return verticalCheck;
+    public boolean isWordVerticalCheck() {
+        return wordVerticalCheck;
     }
 
-    public void setHorizontalCheck(boolean horizontalCheck) {
-        this.horizontalCheck = horizontalCheck;
+    public void setWordHorizontalCheck(boolean wordHorizontalCheck) {
+        this.wordHorizontalCheck = wordHorizontalCheck;
     }
 
-    public void setVerticalCheck(boolean verticalCheck) {
-        this.verticalCheck = verticalCheck;
+    public void setWordVerticalCheck(boolean wordVerticalCheck) {
+        this.wordVerticalCheck = wordVerticalCheck;
     }
 
     @Override

@@ -15,6 +15,7 @@ public class CharacterNode {
 
     // Only used for the construction of the root node in the tree
     public CharacterNode() {
+        terminalNode = false;
     }
 
     public void activateTerminalNode() {
