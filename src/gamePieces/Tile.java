@@ -17,6 +17,10 @@ public class Tile {
         return value;
     }
 
+    public boolean checkTile(char letter) {
+        return this.letter == letter;
+    }
+
     @Override
     public String toString() {
         return "" + letter + " " + value;

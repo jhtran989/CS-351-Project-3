@@ -19,6 +19,14 @@ public class Anchor {
         this.secondaryAnchorType = secondaryAnchorType;
     }
 
+    public PlayDirection getPrimaryDirection() {
+        return primaryDirection;
+    }
+
+    public PlayDirection getSecondaryDirection() {
+        return secondaryDirection;
+    }
+
     public void setLeftLimit(int leftLimit) {
         this.leftLimit = leftLimit;
     }

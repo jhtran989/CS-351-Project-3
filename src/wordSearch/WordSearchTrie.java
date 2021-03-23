@@ -26,6 +26,10 @@ public class WordSearchTrie {
         root = new CharacterNode();
     }
 
+    public CharacterNode getRoot() {
+        return root;
+    }
+
     private boolean searchWord(String word, CharacterNode currentNode) {
         if (word.length() > 0) {
             char currentChar = word.charAt(0);

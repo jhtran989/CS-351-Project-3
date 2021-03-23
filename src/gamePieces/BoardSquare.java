@@ -4,12 +4,14 @@ import constants.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class BoardSquare {
+    private final int NUM_CHAR = 2;
+
     private String twoChar;
     private Character letter;
     private BoardSquareType boardSquareType;
-    private final int NUM_CHAR = 2;
     private int rowIndex;
     private int columnIndex;
     private boolean wordHorizontalCheck;
@@ -24,14 +26,23 @@ public class BoardSquare {
     private List<Character> crossCheckList;
     private boolean crossCheckHorizontal;
     private boolean crossCheckVertical;
+    private boolean activeMultiplier;
+    private Tile activeTile;
+    Set<Character> fullLetterSet;
+
+    // FIXME
+    private List<CrossCheckWord> crossCheckWordList;
+    private CrossCheckWord horizontalCrossCheckWord;
+    private CrossCheckWord verticalCrossCheckWord;
 
     public BoardSquare(String twoChar, int rowIndex, int columnIndex,
-                       int dimension) {
+                       int dimension, Set<Character> fullLetterSet) {
         this.twoChar = twoChar;
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
         this.dimension = dimension;
         letter = null;
+        this.fullLetterSet = fullLetterSet;
 
         setBoardSquareType();
         wordHorizontalCheck = true;
@@ -55,6 +66,54 @@ public class BoardSquare {
         crossCheckList = generateCrossCheckList();
         crossCheckHorizontal = false;
         crossCheckVertical = false;
+
+        activeMultiplier = true;
+        activeTile = null;
+
+        horizontalCrossCheckWord = null;
+        verticalCrossCheckWord = null;
+    }
+
+    public CrossCheckWord getHorizontalCrossCheckWord() {
+        return horizontalCrossCheckWord;
+    }
+
+    public CrossCheckWord getVerticalCrossCheckWord() {
+        return verticalCrossCheckWord;
+    }
+
+    public void addCrossCheckWord(PlayDirection playDirection,
+                                  CrossCheckWord crossCheckWord) {
+        if (playDirection == PlayDirection.HORIZONTAL) {
+            horizontalCrossCheckWord = crossCheckWord;
+        } else {
+            verticalCrossCheckWord = crossCheckWord;
+        }
+    }
+
+    public Tile getActiveTile() {
+        return activeTile;
+    }
+
+    public boolean isActiveMultiplier() {
+        return activeMultiplier;
+    }
+
+    /**
+     * "Deactivates" the multiplier on the board square (so the multiplier is
+     * just x1)
+     * @param tile
+     */
+    public void placeTile(Tile tile) {
+        boardSquareType = BoardSquareType.LETTER;
+        letter = tile.getLetter();
+
+        activeTile = tile;
+        activeMultiplier = false;
+    }
+
+    public List<Character> getCrossCheckList() {
+        return crossCheckList;
     }
 
     private List<Character> generateCrossCheckList() {
@@ -208,7 +267,12 @@ public class BoardSquare {
      */
     private void setBoardSquareType() {
         char firstChar = twoChar.charAt(0);
-        char secondChar = twoChar.charAt(1);
+        char secondChar = ' '; // default value if there is a letter for the
+        // word solver...
+
+        if (!fullLetterSet.contains(firstChar)) {
+            secondChar = twoChar.charAt(1);
+        }
 
         if (firstChar != '.') {
             if (firstChar == '2') {
@@ -218,7 +282,8 @@ public class BoardSquare {
             } else { // has to be a space, which means this square represents
                 // a letter
                 boardSquareType = BoardSquareType.LETTER;
-                letter = secondChar;
+                letter = firstChar;
+                twoChar = " " + letter;
             }
         } else {
             if (secondChar == '2') {
