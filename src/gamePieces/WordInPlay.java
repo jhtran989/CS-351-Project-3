@@ -83,8 +83,7 @@ public class WordInPlay {
     @Override
     public String toString() {
         String direction =
-                "Play direction: " + playDirection
-                        + " (index " + rowColumnIndex + ") ";
+                playDirection + " (index " + rowColumnIndex + ") ";
         return direction + "first index: " + firstIndex + ", last index: "
                 + lastIndex + ", word: " + word;
     }

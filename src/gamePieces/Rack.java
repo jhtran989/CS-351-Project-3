@@ -1,9 +1,9 @@
 package gamePieces;
 
 import comparators.TileComparator;
-import utilities.CustomParser;
 import wordSolver.MainWordSolver;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -11,9 +11,11 @@ import java.util.TreeMap;
 public class Rack {
     protected Map<Tile, Character> rackMap;
     protected TileBag tileBag;
+    private Scanner scanner;
 
-    public Rack(TileBag tileBag) {
-        rackMap = new TreeMap<>(new TileComparator());
+    public Rack(TileBag tileBag, Scanner scanner) {
+        this.scanner = scanner;
+        rackMap = new HashMap<>();
         this.tileBag = tileBag;
 
         setupRack();
@@ -44,23 +46,22 @@ public class Rack {
     //  and maybe change .equals()
     //  for Tiles...)
     private void setupRack() {
-        try (Scanner scanner =
-                     new Scanner(System.in)) {
-            String rackLetters = "empty";
-            if (scanner.hasNextLine()) {
-                rackLetters = scanner.nextLine();
-            }
+        String rackLetters = "empty";
+        if (scanner.hasNextLine()) {
+            rackLetters = scanner.nextLine();
+        }
 
-            if (MainWordSolver.DEBUG) {
-                System.out.println("Rack input: " + rackLetters);
-            }
+        if (MainWordSolver.DEBUG) {
+            System.out.println("Rack input: " + rackLetters);
+        }
 
-            for (int i = 0; i < rackLetters.length(); i++) {
-                char currentLetter = rackLetters.charAt(i);
-                Tile currentTile =
-                        tileBag.findTileInFrequencyMap(currentLetter);
-                rackMap.put(currentTile, currentLetter);
-            }
+        for (int i = 0; i < rackLetters.length(); i++) {
+            char currentLetter = rackLetters.charAt(i);
+            Tile currentTile =
+                    tileBag.findTileInFrequencyMap(currentLetter);
+            Tile newTile = new Tile(currentTile);
+
+            rackMap.put(newTile, currentLetter);
         }
     }
 

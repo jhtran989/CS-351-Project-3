@@ -28,4 +28,13 @@ public enum PlayDirection {
             return CheckDirection.UP;
         }
     }
+
+    @Override
+    public String toString() {
+        if (this == HORIZONTAL) {
+            return "Play direction: HORIZONTAL";
+        } else {
+            return "Play direction: VERTICAL";
+        }
+    }
 }

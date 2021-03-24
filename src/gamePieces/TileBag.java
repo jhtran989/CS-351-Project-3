@@ -3,6 +3,7 @@ package gamePieces;
 import comparators.TileComparator;
 import constants.InputChoice;
 import exceptions.InputErrorException;
+import exceptions.InternalError;
 import utilities.CustomParser;
 
 import java.io.FileNotFoundException;
@@ -10,13 +11,15 @@ import java.io.FileReader;
 import java.util.*;
 
 public class TileBag {
-    private Map<Tile, Integer> frequencyTile;
+    private Map<Tile, Integer> tileFrequency;
     private Set<Character> fullLetterSet;
     private InputChoice inputChoice;
+    private Scanner scanner;
 
-    public TileBag(InputChoice inputChoice) {
+    public TileBag(InputChoice inputChoice, Scanner scanner) {
         this.inputChoice = inputChoice;
-        frequencyTile = new TreeMap<>(new TileComparator());
+        this.scanner = scanner;
+        tileFrequency = new TreeMap<>(new TileComparator());
         fullLetterSet = new TreeSet<>();
 
         if (this.inputChoice == InputChoice.FILE) {
@@ -27,7 +30,7 @@ public class TileBag {
             setupTiles();
         }
 
-        //printTiles();
+        printTiles();
     }
 
     public Set<Character> getFullLetterSet() {
@@ -36,10 +39,22 @@ public class TileBag {
 
     public Tile findTileInFrequencyMap(char letter) {
         for (Map.Entry<Tile, Integer> tileFrequencyEntry :
-                frequencyTile.entrySet()) {
+                tileFrequency.entrySet()) {
             Tile currentTile = tileFrequencyEntry.getKey();
+            int frequency = tileFrequencyEntry.getValue();
 
             if (currentTile.getLetter() == letter) {
+                if (frequency - 1 < 0) {
+                    try {
+                        throw new InternalError("Out of tile " + currentTile
+                                + " " + "in the tile bag...");
+                    } catch (InternalError internalError) {
+                        System.out.println(internalError.getMessage());
+                    }
+                }
+
+                frequency--;
+                tileFrequency.put(currentTile, frequency);
                 return currentTile;
             }
         }
@@ -55,9 +70,14 @@ public class TileBag {
                 char letter = CustomParser.parseChar(scanner.next());
                 int value = CustomParser.parseInt(scanner.next());
                 int frequency = CustomParser.parseInt(scanner.next());
-                frequencyTile.put(new Tile(letter, value),
+                tileFrequency.put(new Tile(letter, value),
                         frequency);
-                fullLetterSet.add(letter);
+
+                // only allow the letters from the alphabet...asterisk almost
+                // got in...
+                if (letter >= 'a' && letter <= 'z') {
+                    fullLetterSet.add(letter);
+                }
 
                 scanner.nextLine();
             }
@@ -67,27 +87,26 @@ public class TileBag {
     }
 
     private void setupTiles() {
-        try (Scanner scanner =
-                     new Scanner(System.in)) {
+        try {
             while (scanner.hasNextLine()) {
                 char letter = CustomParser.parseChar(scanner.next());
                 int value = CustomParser.parseInt(scanner.next());
                 int frequency = CustomParser.parseInt(scanner.next());
-                frequencyTile.put(new Tile(letter, value),
+                tileFrequency.put(new Tile(letter, value),
                         frequency);
                 fullLetterSet.add(letter);
 
                 scanner.nextLine();
             }
         } catch (InputErrorException inputErrorException) {
-            System.out.println(inputErrorException .getMessage());
+            System.out.println(inputErrorException.getMessage());
         }
     }
 
     private void printTiles() {
         System.out.println("Tiles");
 
-        for (Map.Entry<Tile, Integer> tileEntry : frequencyTile.entrySet()) {
+        for (Map.Entry<Tile, Integer> tileEntry : tileFrequency.entrySet()) {
             System.out.println(tileEntry.getKey() + " (frequency: " +
                     tileEntry.getValue() + ")");
         }

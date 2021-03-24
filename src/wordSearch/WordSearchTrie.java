@@ -1,14 +1,22 @@
 package wordSearch;
 
+import gamePieces.TileBag;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class WordSearchTrie {
     private CharacterNode root;
+    private TileBag tileBag;
+    private Set<Character> fullLetterSet;
 
-    public WordSearchTrie(String dictionaryFilePath) {
+    public WordSearchTrie(String dictionaryFilePath, TileBag tileBag) {
+        this.tileBag = tileBag;
+        fullLetterSet = tileBag.getFullLetterSet();
+
         initializeRoot();
 
         setupWordSearchTree(dictionaryFilePath);
@@ -39,7 +47,40 @@ public class WordSearchTrie {
                         " " + currentNode.getLevel() + ")");
             }
 
-            CharacterNode searchNode =
+            CharacterNode searchNode;
+
+            // FIXME: add something for a blank tile...
+            if (currentChar == '*') {
+                System.out.println("Asterisk found...");
+
+                // Will search using every character given in the tile bag
+                // (set of available tiles -- for the usual game, just the 26
+                // letters of the alphabet) and return the earliest found
+                // word in the given dictionary
+                for (Character specialCharacter : fullLetterSet) {
+                    if (MainWordSearch.DEBUG) {
+                        System.out.println("Current char: " + specialCharacter +
+                                " (level " + currentNode.getLevel() + ")");
+                    }
+
+                    searchNode = currentNode.getChildNode(
+                            specialCharacter);
+
+                    if (searchNode != null) {
+                        boolean foundSpecialWord = searchWord(
+                                word.substring(1),
+                                searchNode);
+
+                        if (foundSpecialWord) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+
+            searchNode =
                     currentNode.getChildNode(currentChar);
 
             if (searchNode != null) {

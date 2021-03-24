@@ -13,6 +13,97 @@ import java.util.List;
 
 public class Scrap {
 
+    //                    for (Character crossCheckCharacter : crossCheckSet) {
+//                        String potentialWord =
+//                                firstPart + crossCheckCharacter + secondPart;
+//
+//                        if (!wordSearchTrie.searchWord(potentialWord)) {
+//                            if (MainWordSolver.DEBUG) {
+//                                System.out.println("Invalid word: " +
+//                                        potentialWord);
+//                            }
+//
+////                            char invalidLetter =
+////                                    anchorBoardSquare.getLetter();
+//                            crossCheckSet.remove(crossCheckCharacter);
+//
+//                            if (MainWordSolver.DEBUG) {
+//                                System.out.println("Removing the character " +
+//                                        anchorBoardSquare.getLetter());
+//                                System.out.println("Updated cross check set:");
+//                                System.out.println(crossCheckSet);
+//                            }
+//                        } else {
+//                            if (MainWordSolver.DEBUG) {
+//                                System.out.println("Found word: " +
+//                                        potentialWord);
+//                            }
+//                        }
+//                    }
+
+    //    public void initiateCrossChecks(PlayDirection playDirection) {
+//        AnchorType primaryAnchorType = anchor.getPrimaryAnchorType();
+//        AnchorType secondaryAnchorType = anchor.getSecondaryAnchorType();
+//
+//        if (primaryAnchorType != null &&
+//                primaryAnchorType.getInsideOutsideAnchor()
+//                        == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
+//            if (playDirection == PlayDirection.HORIZONTAL) {
+//                crossCheckVertical = true;
+//            } else {
+//                crossCheckHorizontal = true;
+//            }
+//        }
+//
+//        if (secondaryAnchorType != null &&
+//                secondaryAnchorType.getInsideOutsideAnchor()
+//                        == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
+//            if (playDirection == PlayDirection.HORIZONTAL) {
+//                crossCheckHorizontal = true;
+//            } else {
+//                crossCheckVertical = true;
+//            }
+//        }
+//    }
+
+    //    public boolean getCrossCheck(PlayDirection playDirection) {
+//        if (playDirection == PlayDirection.HORIZONTAL) {
+//            return crossCheckHorizontal;
+//        } else {
+//            return crossCheckVertical;
+//        }
+//    }
+
+    //                if (first) {
+//                    secondHeadBoardSquare =
+//                            getBoardSquareInCheckDirection(
+//                                    boardSquare,
+//                                    oppositePlayCheckDirection);
+//                } else {
+//                    secondHeadBoardSquare =
+//                            getBoardSquareInCheckDirection(
+//                                    boardSquare,
+//                                    wordPlayDirection
+//                                            .getCheckDirection());
+//                }
+
+    //                if (first) {
+//                    CheckDirection oppositePlayCheckDirection =
+//                            PlayDirection.getOtherPlayDirection(
+//                                    wordPlayDirection)
+//                                    .getReverseCheckDirection();
+//                    firstHeadBoardSquare =
+//                            getBoardSquareInCheckDirection(
+//                                    boardSquare,
+//                                    oppositePlayCheckDirection);
+//                } else {
+//                    firstHeadBoardSquare =
+//                            getBoardSquareInCheckDirection(
+//                                    boardSquare,
+//                                    wordPlayDirection
+//                                            .getCheckDirection());
+//                }
+
     /**
      //     * Returns the next BoardSquareType in the specified CheckDirection
      //     *

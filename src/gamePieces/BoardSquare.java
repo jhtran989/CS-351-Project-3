@@ -2,15 +2,15 @@ package gamePieces;
 
 import constants.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class BoardSquare {
     private final int NUM_CHAR = 2;
 
     private String twoChar;
-    private Character letter;
+    private char letter;
     private BoardSquareType boardSquareType;
     private int rowIndex;
     private int columnIndex;
@@ -23,12 +23,12 @@ public class BoardSquare {
     private boolean rightEdge;
     private boolean leftEdge;
     private boolean crossCheck;
-    private List<Character> crossCheckList;
-    private boolean crossCheckHorizontal;
-    private boolean crossCheckVertical;
+    private Set<Character> crossCheckList;
     private boolean activeMultiplier;
     private Tile activeTile;
     Set<Character> fullLetterSet;
+    private boolean crossCheckHorizontal;
+    private boolean crossCheckVertical;
 
     // FIXME
     private List<CrossCheckWord> crossCheckWordList;
@@ -41,7 +41,7 @@ public class BoardSquare {
         this.rowIndex = rowIndex;
         this.columnIndex = columnIndex;
         this.dimension = dimension;
-        letter = null;
+        letter = ' '; // changed from null so it could be printed out easier
         this.fullLetterSet = fullLetterSet;
 
         setBoardSquareType();
@@ -63,15 +63,59 @@ public class BoardSquare {
         }
 
         crossCheck = false;
-        crossCheckList = generateCrossCheckList();
-        crossCheckHorizontal = false;
-        crossCheckVertical = false;
+        crossCheckList = generateCrossCheckSet();
 
         activeMultiplier = true;
         activeTile = null;
 
         horizontalCrossCheckWord = null;
         verticalCrossCheckWord = null;
+
+        crossCheckHorizontal = false;
+        crossCheckVertical = false;
+    }
+
+    public void printCrossChecks() {
+        System.out.println("Cross checks - Horizontal: " +
+                crossCheckHorizontal + ", " + "Vertical: " +
+                crossCheckVertical);
+    }
+
+    public boolean getCrossCheck(PlayDirection playDirection) {
+        if (playDirection == PlayDirection.HORIZONTAL) {
+            return crossCheckHorizontal;
+        } else {
+            return crossCheckVertical;
+        }
+    }
+
+    public void initiateCrossChecks(PlayDirection playDirection) {
+        AnchorType primaryAnchorType = anchor.getPrimaryAnchorType();
+        AnchorType secondaryAnchorType = anchor.getSecondaryAnchorType();
+
+        if (primaryAnchorType != null &&
+                primaryAnchorType.getInsideOutsideAnchor()
+                        == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
+            if (boardSquareType != BoardSquareType.LETTER) {
+                if (playDirection == PlayDirection.HORIZONTAL) {
+                    crossCheckVertical = true;
+                } else {
+                    crossCheckHorizontal = true;
+                }
+            }
+        }
+
+        if (secondaryAnchorType != null &&
+                secondaryAnchorType.getInsideOutsideAnchor()
+                        == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
+            if (boardSquareType != BoardSquareType.LETTER) {
+                if (playDirection == PlayDirection.HORIZONTAL) {
+                    crossCheckHorizontal = true;
+                } else {
+                    crossCheckVertical = true;
+                }
+            }
+        }
     }
 
     public CrossCheckWord getHorizontalCrossCheckWord() {
@@ -112,18 +156,20 @@ public class BoardSquare {
         activeMultiplier = false;
     }
 
-    public List<Character> getCrossCheckList() {
+    public Set<Character> getCrossCheckList() {
         return crossCheckList;
     }
 
-    private List<Character> generateCrossCheckList() {
-        List<Character> copyList = new ArrayList<>();
+    private Set<Character> generateCrossCheckSet() {
+        Set<Character> copySet = new TreeSet<>();
 
-        for (int i = 'a'; i <= 'z'; i++) {
-            copyList.add((char) i);
+        if (boardSquareType == BoardSquareType.LETTER) {
+            copySet.add(letter);
+        } else {
+            copySet.addAll(fullLetterSet);
         }
 
-        return copyList;
+        return copySet;
     }
 
     public void resetCheckPlayDirection() {
@@ -136,39 +182,6 @@ public class BoardSquare {
             wordHorizontalCheck = false;
         } else {
             wordVerticalCheck = false;
-        }
-    }
-
-    public void initiateCrossChecks(PlayDirection playDirection) {
-        AnchorType primaryAnchorType = anchor.getPrimaryAnchorType();
-        AnchorType secondaryAnchorType = anchor.getSecondaryAnchorType();
-
-        if (primaryAnchorType != null &&
-                primaryAnchorType.getInsideOutsideAnchor()
-                        == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
-            if (playDirection == PlayDirection.HORIZONTAL) {
-                crossCheckVertical = true;
-            } else {
-                crossCheckHorizontal = true;
-            }
-        }
-
-        if (secondaryAnchorType != null &&
-                secondaryAnchorType.getInsideOutsideAnchor()
-                        == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
-            if (playDirection == PlayDirection.HORIZONTAL) {
-                crossCheckHorizontal = true;
-            } else {
-                crossCheckVertical = true;
-            }
-        }
-    }
-
-    public boolean getCrossCheck(PlayDirection playDirection) {
-        if (playDirection == PlayDirection.HORIZONTAL) {
-            return crossCheckHorizontal;
-        } else {
-            return crossCheckVertical;
         }
     }
 
@@ -220,7 +233,7 @@ public class BoardSquare {
         return anchor;
     }
 
-    public Character getLetter() {
+    public char getLetter() {
         return letter;
     }
 
@@ -299,5 +312,20 @@ public class BoardSquare {
 
     public BoardSquareType getBoardSquareType() {
         return boardSquareType;
+    }
+
+    public void printAnchorSquare() {
+        printFullBoardSquareInfo();
+        System.out.println("Anchor: " + letter + " Primary direction "
+                + anchor.getPrimaryDirection() + " " +
+                AnchorType.customToString(
+                        anchor.getPrimaryAnchorType()) + " " +
+                AnchorType.customToString(
+                        anchor.getSecondaryAnchorType()));
+    }
+
+    public void printFullBoardSquareInfo() {
+        System.out.println("Letter " + letter + " row index: " + rowIndex +
+                " column index: " + columnIndex);
     }
 }

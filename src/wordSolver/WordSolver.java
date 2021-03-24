@@ -20,7 +20,7 @@ public class WordSolver {
     private int lastLetterIndex;
     private int rowColumnLetterIndex;
     private List<BoardSquare> anchorBoardSquaresList;
-    private List<BoardSquare> crossCheckBoardSquareList;
+    private List<BoardSquare> crossCheckBoardSquareWordList;
 
     private Rack rack;
     private HashMap<WordInPlay, Integer> legalWordsMap;
@@ -34,12 +34,16 @@ public class WordSolver {
         anchorBoardSquaresList = new ArrayList<>();
         legalWordsMap = new HashMap<>();
 
-        crossCheckBoardSquareList = new ArrayList<>();
+        crossCheckBoardSquareWordList = new ArrayList<>();
     }
 
     public void generateInitialHighestScoringMove() {
         findInitialPossibleWords();
         findHighestScoringMove();
+
+        if (MainWordSolver.DEBUG) {
+            System.out.println("Finished word solver...");
+        }
     }
 
     public void generateHighestScoringMove() {
@@ -65,8 +69,23 @@ public class WordSolver {
     }
 
     private void findInitialPossibleWords() {
+        findWordsInPlay();
         performInitialPreliminarySearch();
         CharacterNode wordSearchTrieRoot = wordSearchTrie.getRoot();
+
+        if (MainWordSolver.DEBUG) {
+            System.out.println();
+            System.out.println("Now finding possible words");
+            System.out.println();
+
+            System.out.println("Anchor squares:");
+
+            for (BoardSquare boardSquare : anchorBoardSquaresList) {
+                boardSquare.printAnchorSquare();
+            }
+
+            System.out.println();
+        }
 
         for (BoardSquare anchorBoardSquare : anchorBoardSquaresList) {
             Anchor currentAnchor = anchorBoardSquare.getAnchor();
@@ -75,8 +94,12 @@ public class WordSolver {
             AnchorType secondaryAnchorType =
                     currentAnchor.getSecondaryAnchorType();
 
-            int leftLimit;
-
+            if (MainWordSolver.DEBUG) {
+                System.out.println("Current anchor square: ");
+                anchorBoardSquare.printAnchorSquare();
+                System.out.println("Left limit: " +
+                        currentAnchor.getLeftLimit());
+            }
 
             PlayDirection primaryPlayDirection =
                     currentAnchor.getPrimaryDirection();
@@ -89,24 +112,27 @@ public class WordSolver {
                     rowColumnLetterIndex,
                     new ArrayList<>());
 
-            switch (primaryAnchorType) {
-                case PRIMARY_CENTER_HEAD:
-                case PRIMATE_SIDE_HEAD:
-                    leftLimit = currentAnchor.getLeftLimit();
-                    leftPart(blankPrimaryWordInPlay,
-                            wordSearchTrieRoot,
-                            leftLimit,
-                            anchorBoardSquare,
-                            primaryPlayDirection);
-                    break;
-                case PRIMARY_BODY:
-                    extendRight(blankPrimaryWordInPlay,
-                            wordSearchTrieRoot,
-                            anchorBoardSquare,
-                            primaryPlayDirection);
-                    break;
-                default:
-                    //throw new InternalError("Invalid Primary Anchor type");
+            int leftLimit;
+            if (primaryAnchorType != null) {
+                switch (primaryAnchorType) {
+                    case PRIMARY_CENTER_HEAD:
+                    case PRIMATE_SIDE_HEAD:
+                        leftLimit = currentAnchor.getLeftLimit();
+                        leftPart(blankPrimaryWordInPlay,
+                                wordSearchTrieRoot,
+                                leftLimit,
+                                anchorBoardSquare,
+                                primaryPlayDirection);
+                        break;
+                    case PRIMARY_BODY:
+                        extendRight(blankPrimaryWordInPlay,
+                                wordSearchTrieRoot,
+                                anchorBoardSquare,
+                                primaryPlayDirection);
+                        break;
+                    default:
+                        //throw new InternalError("Invalid Primary Anchor type");
+                }
             }
 
             PlayDirection secondaryPlayDirection =
@@ -120,17 +146,19 @@ public class WordSolver {
                     rowColumnLetterIndex,
                     new ArrayList<>());
 
-            switch (secondaryAnchorType) {
-                case SECONDARY_END:
-                case SECONDARY_BODY:
-                    leftLimit = currentAnchor.getLeftLimit();
-                    leftPart(blankSecondaryWordInPlay,
-                            wordSearchTrieRoot,
-                            leftLimit, anchorBoardSquare,
-                            secondaryPlayDirection);
-                    break;
-                default:
-                    //throw new InternalError("Invalid Secondary Anchor type");
+            if (secondaryAnchorType != null) {
+                switch (secondaryAnchorType) {
+                    case SECONDARY_END:
+                    case SECONDARY_BODY:
+                        leftLimit = currentAnchor.getLeftLimit();
+                        leftPart(blankSecondaryWordInPlay,
+                                wordSearchTrieRoot,
+                                leftLimit, anchorBoardSquare,
+                                secondaryPlayDirection);
+                        break;
+                    default:
+                        //throw new InternalError("Invalid Secondary Anchor type");
+                }
             }
         }
     }
@@ -171,32 +199,35 @@ public class WordSolver {
                 && currentBoardSquare.getBoardSquareType()
                 != BoardSquareType.LETTER) {
             if (currentNode.isTerminalNode()) {
+                System.out.println("Legal word added: " + partialWord);
                 addLegalWord(partialWord);
             }
 
-            for (Map.Entry<Character, CharacterNode> childNodeEntry
-                    : currentNode.getChildrenMap().entrySet()) {
-                char currentCharacter = childNodeEntry.getKey();
-                Tile currentTile = rack.searchCharacter(
-                        currentCharacter);
+            if (currentNode.getChildrenMap() != null) {
+                for (Map.Entry<Character, CharacterNode> childNodeEntry
+                        : currentNode.getChildrenMap().entrySet()) {
+                    char currentCharacter = childNodeEntry.getKey();
+                    Tile currentTile = rack.searchCharacter(
+                            currentCharacter);
 
-                if (currentTile != null) {
-                    List<Character> crossCheckList =
-                            currentBoardSquare.getCrossCheckList();
-                    if (crossCheckList.contains(currentCharacter)) {
-                        rack.removeTile(currentTile);
+                    if (currentTile != null) {
+                        Set<Character> crossCheckSet =
+                                currentBoardSquare.getCrossCheckList();
+                        if (crossCheckSet.contains(currentCharacter)) {
+                            rack.removeTile(currentTile);
 
-                        BoardSquare nextBoardSquare =
-                                getBoardSquareInCheckDirection(
-                                        currentBoardSquare,
-                                        playDirection
-                                                .getCheckDirection());
-                        extendRight(partialWord,
-                                childNodeEntry.getValue(),
-                                nextBoardSquare,
-                                playDirection);
+                            BoardSquare nextBoardSquare =
+                                    getBoardSquareInCheckDirection(
+                                            currentBoardSquare,
+                                            playDirection
+                                                    .getCheckDirection());
+                            extendRight(partialWord,
+                                    childNodeEntry.getValue(),
+                                    nextBoardSquare,
+                                    playDirection);
 
-                        rack.addTile(currentTile);
+                            rack.addTile(currentTile);
+                        }
                     }
                 }
             }
@@ -236,40 +267,147 @@ public class WordSolver {
     // TODO: add the search...
     private void performInitialCrossChecks() {
         for (BoardSquare anchorBoardSquare : anchorBoardSquaresList) {
+            if (MainWordSolver.DEBUG) {
+                System.out.println();
+                System.out.println("Current anchor square:");
+                anchorBoardSquare.printAnchorSquare();
+                anchorBoardSquare.printCrossChecks();
+            }
+
             for (PlayDirection playDirection : PlayDirection.values()) {
-                if (anchorBoardSquare.getCrossCheck(playDirection)) {
-                    crossCheckBoardSquareList = new ArrayList<>();
-                    List<Character> crossCheckList =
+                if (anchorBoardSquare.getCrossCheck(
+                        playDirection)) {
+                    crossCheckBoardSquareWordList = new ArrayList<>();
+                    Set<Character> crossCheckSet =
                             anchorBoardSquare.getCrossCheckList();
+
+                    // FIXME
+                    if (MainWordSolver.DEBUG) {
+                        System.out.println();
+                        System.out.println("Cross check direction: " +
+                                playDirection);
+                        System.out.println("Initial cross check list:");
+                        System.out.println(crossCheckSet);
+                        System.out.println();
+                    }
 
                     String firstPart = firstPartCrossCheck(
                             anchorBoardSquare,
                             playDirection);
+
+                    // FIXME
+                    if (MainWordSolver.DEBUG) {
+                        System.out.println();
+                        System.out.println("Cross check first part: " +
+                                firstPart);
+                        System.out.println();
+                    }
+
                     String secondPart = secondPartCrossCheck(
                             anchorBoardSquare,
                             playDirection);
 
+                    // FIXME
+                    if (MainWordSolver.DEBUG) {
+                        System.out.println();
+                        System.out.println("Cross check second part: " +
+                                secondPart);
+                        System.out.println();
+                    }
+
                     setLetterIndices(playDirection,
                             anchorBoardSquare);
+
+                    // FIXME
+                    if (MainWordSolver.DEBUG) {
+                        System.out.println("Cross check word:");
+                        System.out.println(crossCheckBoardSquareWordList);
+                    }
+
                     CrossCheckWord crossCheckWord =
                             new CrossCheckWord(playDirection,
                                     firstPart + secondPart,
                                     firstLetterIndex,
                                     lastLetterIndex,
                                     rowColumnLetterIndex,
-                                    crossCheckBoardSquareList);
+                                    crossCheckBoardSquareWordList);
                     anchorBoardSquare.addCrossCheckWord(playDirection,
                             crossCheckWord);
 
-                    for (Character crossCheckCharacter : crossCheckList) {
+                    // FIXME
+                    if (MainWordSolver.DEBUG) {
+                        System.out.println();
+                        System.out.println("Cross check word:");
+                        System.out.println(crossCheckWord);
+                    }
+
+                    Iterator<Character> crossCheckIterator =
+                            crossCheckSet.iterator();
+                    while (crossCheckIterator.hasNext()) {
+                        char currentCrossCheckCharacter =
+                                crossCheckIterator.next();
+
                         String potentialWord =
-                                firstPart + crossCheckCharacter + secondPart;
+                                firstPart + currentCrossCheckCharacter +
+                                        secondPart;
 
                         if (!wordSearchTrie.searchWord(potentialWord)) {
-                            Character invalidLetter =
-                                    anchorBoardSquare.getLetter();
-                            crossCheckList.remove(invalidLetter);
+                            if (MainWordSolver.DEBUG) {
+                                System.out.println("Invalid word: " +
+                                        potentialWord);
+                            }
+
+//                            char invalidLetter =
+//                                    anchorBoardSquare.getLetter();
+                            crossCheckIterator.remove();
+
+//                            if (MainWordSolver.DEBUG) {
+//                                System.out.println("Removing the character " +
+//                                        anchorBoardSquare.getLetter());
+//                                System.out.println("Updated cross check set:");
+//                                System.out.println(crossCheckSet);
+//                            }
+                        } else {
+                            if (MainWordSolver.DEBUG) {
+                                System.out.println("Found word: " +
+                                        potentialWord);
+                            }
                         }
+                    }
+
+//                    for (Character crossCheckCharacter : crossCheckSet) {
+//                        String potentialWord =
+//                                firstPart + crossCheckCharacter + secondPart;
+//
+//                        if (!wordSearchTrie.searchWord(potentialWord)) {
+//                            if (MainWordSolver.DEBUG) {
+//                                System.out.println("Invalid word: " +
+//                                        potentialWord);
+//                            }
+//
+////                            char invalidLetter =
+////                                    anchorBoardSquare.getLetter();
+//                            crossCheckSet.remove(crossCheckCharacter);
+//
+//                            if (MainWordSolver.DEBUG) {
+//                                System.out.println("Removing the character " +
+//                                        anchorBoardSquare.getLetter());
+//                                System.out.println("Updated cross check set:");
+//                                System.out.println(crossCheckSet);
+//                            }
+//                        } else {
+//                            if (MainWordSolver.DEBUG) {
+//                                System.out.println("Found word: " +
+//                                        potentialWord);
+//                            }
+//                        }
+//                    }
+
+                    // FIXME
+                    if (MainWordSolver.DEBUG) {
+                        System.out.println();
+                        System.out.println("Final cross check list:");
+                        System.out.println(crossCheckSet);
                     }
                 }
             }
@@ -290,17 +428,27 @@ public class WordSolver {
                 playDirection.getReverseCheckDirection()));
         BoardSquare previousBoardSquare = dummyBoardSquare.get(0);
 
+        if (MainWordSolver.DEBUG) {
+            System.out.println("First part call: ");
+            previousBoardSquare.printFullBoardSquareInfo();
+        }
+
         while (previousBoardSquare != null
                 && previousBoardSquare.getBoardSquareType()
                 == BoardSquareType.LETTER) {
-            crossCheckBoardSquareList.add(0, previousBoardSquare);
+            crossCheckBoardSquareWordList.add(0, previousBoardSquare);
             firstPart = previousBoardSquare.getLetter() + firstPart;
 
             dummyBoardSquare.clear();
             dummyBoardSquare.add(getBoardSquareInCheckDirection(
-                    anchorBoardSquare,
+                    previousBoardSquare,
                     playDirection.getReverseCheckDirection()));
             previousBoardSquare = dummyBoardSquare.get(0);
+
+            if (MainWordSolver.DEBUG) {
+                System.out.println("First part call: ");
+                previousBoardSquare.printFullBoardSquareInfo();
+            }
         }
 
         return firstPart;
@@ -313,20 +461,30 @@ public class WordSolver {
 
         dummyBoardSquare.add(getBoardSquareInCheckDirection(
                 anchorBoardSquare,
-                playDirection.getReverseCheckDirection()));
+                playDirection.getCheckDirection()));
         BoardSquare nextBoardSquare = dummyBoardSquare.get(0);
+
+        if (MainWordSolver.DEBUG) {
+            System.out.println("First part call: ");
+            nextBoardSquare.printFullBoardSquareInfo();
+        }
 
         while (nextBoardSquare != null
                 && nextBoardSquare.getBoardSquareType()
                 == BoardSquareType.LETTER) {
-            crossCheckBoardSquareList.add(dummyBoardSquare.get(0));
+            crossCheckBoardSquareWordList.add(dummyBoardSquare.get(0));
             secondPart += nextBoardSquare.getLetter();
 
             dummyBoardSquare.clear();
             dummyBoardSquare.add(getBoardSquareInCheckDirection(
-                    anchorBoardSquare,
-                    playDirection.getReverseCheckDirection()));
+                    nextBoardSquare,
+                    playDirection.getCheckDirection()));
             nextBoardSquare = dummyBoardSquare.get(0);
+
+            if (MainWordSolver.DEBUG) {
+                System.out.println("Second part call: ");
+                nextBoardSquare.printFullBoardSquareInfo();
+            }
         }
 
         return secondPart;
@@ -363,6 +521,24 @@ public class WordSolver {
                 }
             }
 
+            // FIXME
+            if (MainWordSolver.DEBUG) {
+                System.out.println();
+                System.out.println("Current word board square list: ");
+                System.out.println();
+
+                for (BoardSquare boardSquare : wordBoardSquareList) {
+                    boardSquare.printFullBoardSquareInfo();
+                }
+            }
+
+            // FIXME
+            if (MainWordSolver.DEBUG) {
+                System.out.println();
+                System.out.println("Inside anchors:");
+                System.out.println();
+            }
+
             // add the inside anchor squares (only the first board square is
             // in the primary direction, and the rest are used to check in
             // the opposite play direction -- i.e. if the word is played
@@ -385,69 +561,97 @@ public class WordSolver {
                 first = false;
             }
 
+            // FIXME
+            if (MainWordSolver.DEBUG) {
+                System.out.println();
+                System.out.println("Side body anchors - up/right");
+                System.out.println();
+            }
+
             // add the side body anchor squares (in the "buffer" region that
             // doesn't contain a letter yet -- adjacent to the word and
             // played along the same play direction)
+            CheckDirection oppositePlayCheckDirection =
+                    PlayDirection.getOtherPlayDirection(
+                            wordPlayDirection)
+                            .getReverseCheckDirection();
+
             first = true;
             for (BoardSquare boardSquare : wordBoardSquareList) {
                 BoardSquare firstHeadBoardSquare =
                         getBoardSquareInCheckDirection(
                                 boardSquare,
-                                wordPlayDirection
-                                        .getCheckDirection());
+                                oppositePlayCheckDirection);
 
                 if (firstHeadBoardSquare == null) {
                     break;
                 }
 
-                if (checkPrimaryBodyAnchor(
-                        firstHeadBoardSquare,
-                        wordPlayDirection)) {
-                    if (first) {
+                if (first) {
+                    if (checkLeftExtend(
+                            firstHeadBoardSquare,
+                            wordPlayDirection)) {
                         addAnchorSquare(firstHeadBoardSquare,
                                 wordPlayDirection,
                                 AnchorType.PRIMATE_SIDE_HEAD,
                                 null);
-                    } else {
-                        addAnchorSquare(firstHeadBoardSquare,
-                                wordPlayDirection,
-                                AnchorType.PRIMARY_BODY,
-                                null);
                     }
+                } else {
+                    addAnchorSquare(firstHeadBoardSquare,
+                            wordPlayDirection,
+                            AnchorType.PRIMARY_BODY,
+                            null);
                 }
 
                 first = false;
             }
+
+            // FIXME
+            if (MainWordSolver.DEBUG) {
+                System.out.println();
+                System.out.println("Side body anchors - down/left");
+                System.out.println();
+            }
+
+            oppositePlayCheckDirection = PlayDirection.getOtherPlayDirection(
+                            wordPlayDirection).getCheckDirection();
 
             first = true;
             for (BoardSquare boardSquare : wordBoardSquareList) {
                 BoardSquare secondHeadBoardSquare =
                         getBoardSquareInCheckDirection(
                                 boardSquare,
-                                wordPlayDirection
-                                        .getReverseCheckDirection());
+                                oppositePlayCheckDirection);
 
                 if (secondHeadBoardSquare == null) {
                     break;
                 }
 
-                if (checkPrimaryBodyAnchor(
-                        secondHeadBoardSquare,
-                        wordPlayDirection)) {
-                    if (first) {
+                if (first) {
+                    if (checkLeftExtend(
+                            secondHeadBoardSquare,
+                            wordPlayDirection)) {
                         addAnchorSquare(secondHeadBoardSquare,
                                 wordPlayDirection,
                                 AnchorType.PRIMATE_SIDE_HEAD,
                                 null);
-                    } else {
-                        addAnchorSquare(boardSquare,
-                                wordPlayDirection,
-                                AnchorType.PRIMARY_BODY,
-                                null);
                     }
+                } else {
+                    addAnchorSquare(secondHeadBoardSquare,
+                            wordPlayDirection,
+                            AnchorType.PRIMARY_BODY,
+                            null);
                 }
 
+
                 first = false;
+            }
+
+            // FIXME
+            if (MainWordSolver.DEBUG) {
+                System.out.println();
+                System.out.println("Checking the (secondary) end anchors");
+                System.out.println();
             }
 
             BoardSquare firstBoardSquare = wordBoardSquareList.get(0);
@@ -484,40 +688,19 @@ public class WordSolver {
         }
     }
 
-    private int findLeftLimitAnchor(BoardSquare boardSquare,
-                                    PlayDirection playDirection) {
-        int leftLimit = 0;
-        BoardSquare previousBoardSquare = getBoardSquareInCheckDirection(
-                boardSquare,
-                playDirection.getReverseCheckDirection());
-
-        while (previousBoardSquare != null) {
-            if (previousBoardSquare.getBoardSquareType()
-                    == BoardSquareType.LETTER) {
-                return leftLimit - 1; // so the left part doesn't touch
-                // another word
-            }
-
-            previousBoardSquare = getBoardSquareInCheckDirection(
-                    boardSquare,
-                    playDirection.getReverseCheckDirection());
-            leftLimit++;
-        }
-
-        return leftLimit;
-    }
-
     /**
      * Checks if there is a letter in the board two squares "behind" in in
      * the word play direction (so when we're left extending, we don't
      * over check with the word "behind" it)
+     *
      * @param boardSquare
      * @param playDirection
      * @return
      */
-    private boolean checkPrimaryBodyAnchor(BoardSquare boardSquare,
-                                           PlayDirection playDirection) {
+    private boolean checkLeftExtend(BoardSquare boardSquare,
+                                    PlayDirection playDirection) {
         BoardSquare previousBoardSquare = boardSquare;
+
         for (int i = 0; i < 2; i++) {
             previousBoardSquare =
                     getBoardSquareInCheckDirection(
@@ -537,8 +720,9 @@ public class WordSolver {
 
     /**
      * Checks if the ends in the opposite play direction of the word are letters
-     * Note: the ends of the word cannot contain a letter (else, something
-     * might be wrong with the word search algorithm...)
+     * Note: the ends of the word cannot contain a letter along the play
+     * direction of the word (else, something might be wrong with the word
+     * search algorithm...)
      *
      * @param boardSquare
      * @param checkDirection
@@ -547,6 +731,56 @@ public class WordSolver {
     private boolean checkSecondaryEndAnchor(BoardSquare boardSquare,
                                             CheckDirection checkDirection) {
         return !boardSquare.checkEdge(checkDirection);
+    }
+
+    private void addAnchorSquare(BoardSquare boardSquare,
+                                 PlayDirection wordPlayDirection,
+                                 AnchorType primaryAnchorType,
+                                 AnchorType secondaryAnchorType) {
+        Anchor anchor = new Anchor(wordPlayDirection,
+                primaryAnchorType,
+                secondaryAnchorType);
+        boardSquare.setAnchor(anchor);
+        boardSquare.
+                initiateCrossChecks(
+                wordPlayDirection);
+
+        // FIXME
+        if (MainWordSolver.DEBUG) {
+            boardSquare.printAnchorSquare();
+        }
+
+        if (primaryAnchorType != null) {
+            // FIXME: something is wrong here...
+            anchor.setLeftLimit(findLeftLimitAnchor(boardSquare,
+                    wordPlayDirection));
+        }
+
+        anchorBoardSquaresList.add(boardSquare);
+    }
+
+    private int findLeftLimitAnchor(BoardSquare boardSquare,
+                                    PlayDirection playDirection) {
+        int leftLimit = 0;
+        BoardSquare previousBoardSquare = getBoardSquareInCheckDirection(
+                boardSquare,
+                playDirection.getReverseCheckDirection());
+
+        while (previousBoardSquare != null) {
+            if (previousBoardSquare.getBoardSquareType()
+                    == BoardSquareType.LETTER) {
+                return leftLimit - 1; // so the left part doesn't touch
+                // another word
+            }
+
+            // FIXME: fix 1
+            previousBoardSquare = getBoardSquareInCheckDirection(
+                    previousBoardSquare,
+                    playDirection.getReverseCheckDirection());
+            leftLimit++;
+        }
+
+        return leftLimit;
     }
 
     /**
@@ -562,45 +796,31 @@ public class WordSolver {
                                                                checkDirection) {
         if (checkDirection == CheckDirection.UP) {
             if (!boardSquare.isTopEdge()) {
-                return board.getBoardSquare(boardSquare.getRowIndex() - 1,
-                        boardSquare.getColumnIndex());
+                return board
+                        .getBoardSquare(boardSquare.getRowIndex() - 1,
+                                boardSquare.getColumnIndex());
             }
         } else if (checkDirection == CheckDirection.DOWN) {
             if (!boardSquare.isBottomEdge()) {
-                return board.getBoardSquare(boardSquare.getRowIndex() + 1,
-                        boardSquare.getColumnIndex());
+                return board
+                        .getBoardSquare(boardSquare.getRowIndex() + 1,
+                                boardSquare.getColumnIndex());
             }
         } else if (checkDirection == CheckDirection.LEFT) {
             if (!boardSquare.isLeftEdge()) {
-                return board.getBoardSquare(boardSquare.getRowIndex(),
-                        boardSquare.getColumnIndex() - 1);
+                return board
+                        .getBoardSquare(boardSquare.getRowIndex(),
+                                boardSquare.getColumnIndex() - 1);
             }
         } else { // Right
             if (!boardSquare.isRightEdge()) {
-                return board.getBoardSquare(boardSquare.getRowIndex(),
-                        boardSquare.getColumnIndex() + 1);
+                return board
+                        .getBoardSquare(boardSquare.getRowIndex(),
+                                boardSquare.getColumnIndex() + 1);
             }
         }
 
         return null;
-    }
-
-    private void addAnchorSquare(BoardSquare boardSquare,
-                                 PlayDirection wordPlayDirection,
-                                 AnchorType primaryAnchorType,
-                                 AnchorType secondaryAnchorType) {
-        Anchor anchor = new Anchor(wordPlayDirection,
-                primaryAnchorType,
-                secondaryAnchorType);
-        boardSquare.setAnchor(anchor);
-        boardSquare.initiateCrossChecks(wordPlayDirection);
-
-        if (primaryAnchorType != null) {
-            anchor.setLeftLimit(findLeftLimitAnchor(boardSquare,
-                    wordPlayDirection));
-        }
-
-        anchorBoardSquaresList.add(boardSquare);
     }
 
     public void findWordsInPlay() {
@@ -633,11 +853,13 @@ public class WordSolver {
     // FIXME: realized getting the next board square would probably be the
     //  easiest method, but retained old design (wouldn't want to waste work,
     //  right...)
+
     /**
      * Assuming there's no one letter word
      * Also, the letters are formed from left to right or top to bottom (only
      * one direction to check for each axis -- horizontal or vertical,
      * respectively)
+     *
      * @param playDirection
      * @param boardSquare
      */
@@ -688,7 +910,9 @@ public class WordSolver {
                     wordBoardSquares);
             wordInPlayList.add(wordInPlay);
 
+            // FIXME
             if (MainGamePieces.DEBUG) {
+                System.out.print("Word in play - ");
                 System.out.println(wordInPlay);
             }
         }

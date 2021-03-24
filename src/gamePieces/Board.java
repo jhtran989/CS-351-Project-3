@@ -3,7 +3,6 @@ package gamePieces;
 import constants.*;
 import exceptions.InputErrorException;
 import utilities.CustomParser;
-import wordSolver.MainWordSolver;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,10 +13,12 @@ public class Board {
     private BoardSquare[][] boardSquareArray;
     private InputChoice inputChoice;
     private TileBag tileBag;
+    private Scanner scanner;
 
-    public Board(InputChoice inputChoice, TileBag tileBag) {
+    public Board(InputChoice inputChoice, TileBag tileBag, Scanner scanner) {
         this.inputChoice = inputChoice;
         this.tileBag = tileBag;
+        this.scanner = scanner;
 
         if (this.inputChoice == InputChoice.FILE) {
             String boardFilePath = "resources/scrabble_board.txt";
@@ -26,19 +27,20 @@ public class Board {
             setupBoard();
         }
 
-        //printBoard();
+        printBoard();
     }
 
     public TileBag getTileBag() {
         return tileBag;
     }
 
-    public Board(String boardFilePath, TileBag tileBag) {
+    public Board(String boardFilePath, TileBag tileBag, Scanner scanner) {
         this.tileBag = tileBag;
+        this.scanner = scanner;
 
         setupBoard(boardFilePath);
 
-        //printBoard();
+        printBoard();
     }
 
     //    public Board() {
@@ -87,11 +89,11 @@ public class Board {
                     }
                 }
 
-                //scanner.nextLine();
+                scanner.nextLine();
 
-                if (i != dimension - 1) {
-                    scanner.nextLine();
-                }
+//                if (i != dimension - 1) {
+//                    scanner.nextLine();
+//                }
             }
         } catch (InputErrorException | FileNotFoundException exception) {
             System.out.println(exception.getMessage());
@@ -99,8 +101,7 @@ public class Board {
     }
 
     private void setupBoard() {
-        try (Scanner scanner =
-                     new Scanner(System.in)) {
+        try {
             dimension = CustomParser.parseInt(scanner.nextLine());
             boardSquareArray = new BoardSquare[dimension][dimension];
             for (int i = 0; i < dimension; i++) {
@@ -111,11 +112,11 @@ public class Board {
                             tileBag.getFullLetterSet());
                 }
 
-                //scanner.nextLine();
+                scanner.nextLine();
 
-                if (i != dimension - 1) {
-                    scanner.nextLine();
-                }
+//                if (i != dimension - 1) {
+//                    scanner.nextLine();
+//                }
             }
         } catch (InputErrorException inputErrorException) {
             System.out.println(inputErrorException.getMessage());

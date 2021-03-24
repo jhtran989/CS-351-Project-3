@@ -1,29 +1,50 @@
 package wordSearch;
 
-import java.util.ArrayList;
-import java.util.List;
+import constants.InputChoice;
+import gamePieces.TileBag;
+
+import java.util.*;
 
 public class MainWordSearch {
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static void main(String[] args) {
-        String dictionaryFilePath = "resources/sowpods.txt";
-        WordSearchTrie wordSearchTrie = new WordSearchTrie(
-                dictionaryFilePath);
+//        String dictionaryFilePath = "resources/sowpods.txt";
+//        TileBag tileBag = new TileBag(InputChoice.FILE, null);
+//        WordSearchTrie wordSearchTrie = new WordSearchTrie(
+//                dictionaryFilePath, tileBag);
+//
+//        if (DEBUG) {
+//            wordSearchTrie.printRoot();
+//        }
+//
+//        List<String> wordList = new ArrayList<>();
+//        wordList.add("kljasdfkljksdfa");
+//        wordList.add("apple");
+//        wordList.add("banana");
+//        wordList.add("bannannannna");
+//        wordList.add("b");
+//
+//        for (String s : wordList) {
+//            System.out.println(s + " " + wordSearchTrie.searchWord(s));
+//        }
 
-        if (DEBUG) {
-            wordSearchTrie.printRoot();
+        Set<Character> characterSet = new TreeSet<>();
+        Set<Character> newCharacterSet = new TreeSet<>();
+
+        for (int i = 'a'; i < 'z'; i++) {
+            characterSet.add((char) i);
         }
 
-        List<String> wordList = new ArrayList<>();
-        wordList.add("kljasdfkljksdfa");
-        wordList.add("apple");
-        wordList.add("banana");
-        wordList.add("bannannannna");
-        wordList.add("b");
+        newCharacterSet.addAll(characterSet);
 
-        for (String s : wordList) {
-            System.out.println(s + " " + wordSearchTrie.searchWord(s));
-        }
+        characterSet.remove('c');
+        characterSet.remove('a');
+
+        System.out.println(characterSet);
+
+        newCharacterSet.remove('b');
+
+        System.out.println(newCharacterSet);
     }
 }
