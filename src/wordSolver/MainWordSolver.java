@@ -9,7 +9,12 @@ import wordSearch.WordSearchTrie;
 import java.util.Scanner;
 
 public class MainWordSolver {
-    public static boolean DEBUG = true;
+    public static boolean WORDS_IN_PLAY = true;
+    public static boolean ANCHOR_DEBUG = false;
+    public static boolean LEFT_RIGHT_DEBUG = true;
+    public static boolean WORD_RECURSIVE = true;
+    public static boolean FIND_LEGAL_WORD = true;
+    public static boolean HIGHEST_SCORING_MOVE = true;
 
     public static void main(String[] args) {
         try (Scanner scanner =

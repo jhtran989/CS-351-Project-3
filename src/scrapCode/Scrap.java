@@ -13,6 +13,33 @@ import java.util.List;
 
 public class Scrap {
 
+    // FIXME
+//            WordInPlay blankPrimaryWordInPlay = new WordInPlay(
+//                    primaryPlayDirection, "",
+//                    firstLetterIndex, lastLetterIndex,
+//                    rowColumnLetterIndex,
+//                    new ArrayList<>());
+
+    //                // FIXME: had to create a new object so references doesn't
+//                //  get mixed up...
+//                if (currentAnchorType == AnchorType.PRIMARY_CENTER_HEAD) {
+//                    for (WordInPlay wordInPlay : wordInPlayList) {
+//                        if (!partialWord.equals(wordInPlay)
+//                                && partialWord.getWordLength()
+//                                > wordInPlay.getWordLength()) {
+//                            addLegalWord(new WordInPlay(
+//                                    partialWord));
+//                        }
+//                    }
+//                } else {
+//                    addLegalWord(new WordInPlay(
+//                            partialWord));
+//                }
+//
+//                if (MainWordSolver.FIND_WORD_DEBUG) {
+//                    System.out.println("Legal word added: " + partialWord);
+//                }
+
     //                    for (Character crossCheckCharacter : crossCheckSet) {
 //                        String potentialWord =
 //                                firstPart + crossCheckCharacter + secondPart;

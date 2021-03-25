@@ -1,12 +1,10 @@
 package gamePieces;
 
-import comparators.TileComparator;
 import wordSolver.MainWordSolver;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 public class Rack {
     protected Map<Tile, Character> rackMap;
@@ -51,7 +49,7 @@ public class Rack {
             rackLetters = scanner.nextLine();
         }
 
-        if (MainWordSolver.DEBUG) {
+        if (MainWordSolver.ANCHOR_DEBUG) {
             System.out.println("Rack input: " + rackLetters);
         }
 

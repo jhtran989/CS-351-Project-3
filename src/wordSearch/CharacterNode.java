@@ -15,7 +15,9 @@ public class CharacterNode {
 
     // Only used for the construction of the root node in the tree
     public CharacterNode() {
+        character = ' ';
         terminalNode = false;
+        level = 0;
     }
 
     public void activateTerminalNode() {
@@ -47,10 +49,12 @@ public class CharacterNode {
 //                System.out.println("Creating..." + childCharacter);
 //            }
             currentChildNode = childNode;
-            this.level = level;
+            currentChildNode.level = level;
+
+            childrenMap.put(childCharacter, currentChildNode);
         }
 
-        childrenMap.put(childCharacter, currentChildNode);
+        //childrenMap.put(childCharacter, currentChildNode);
 
         return currentChildNode;
     }
@@ -73,6 +77,6 @@ public class CharacterNode {
 
     @Override
     public String toString() {
-        return "" + character;
+        return "" + character + " (level " + level + ")";
     }
 }

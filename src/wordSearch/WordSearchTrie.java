@@ -43,42 +43,45 @@ public class WordSearchTrie {
             char currentChar = word.charAt(0);
 
             if (MainWordSearch.DEBUG) {
-                System.out.println("Current char: " + currentChar + " (level" +
-                        " " + currentNode.getLevel() + ")");
+                if (currentNode == root) {
+                    System.out.print("Root: ");
+                }
+
+                System.out.println(currentNode);
             }
 
             CharacterNode searchNode;
 
-            // FIXME: add something for a blank tile...
-            if (currentChar == '*') {
-                System.out.println("Asterisk found...");
-
-                // Will search using every character given in the tile bag
-                // (set of available tiles -- for the usual game, just the 26
-                // letters of the alphabet) and return the earliest found
-                // word in the given dictionary
-                for (Character specialCharacter : fullLetterSet) {
-                    if (MainWordSearch.DEBUG) {
-                        System.out.println("Current char: " + specialCharacter +
-                                " (level " + currentNode.getLevel() + ")");
-                    }
-
-                    searchNode = currentNode.getChildNode(
-                            specialCharacter);
-
-                    if (searchNode != null) {
-                        boolean foundSpecialWord = searchWord(
-                                word.substring(1),
-                                searchNode);
-
-                        if (foundSpecialWord) {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            }
+//            // FIXME: add something for a blank tile...
+//            if (currentChar == '*') {
+//                System.out.println("Asterisk found...");
+//
+//                // Will search using every character given in the tile bag
+//                // (set of available tiles -- for the usual game, just the 26
+//                // letters of the alphabet) and return the earliest found
+//                // word in the given dictionary
+//                for (Character specialCharacter : fullLetterSet) {
+//                    if (MainWordSearch.DEBUG) {
+//                        System.out.println("Current char: " + specialCharacter +
+//                                " (level " + currentNode.getLevel() + ")");
+//                    }
+//
+//                    searchNode = currentNode.getChildNode(
+//                            specialCharacter);
+//
+//                    if (searchNode != null) {
+//                        boolean foundSpecialWord = searchWord(
+//                                word.substring(1),
+//                                searchNode);
+//
+//                        if (foundSpecialWord) {
+//                            return true;
+//                        }
+//                    }
+//                }
+//
+//                return false;
+//            }
 
             searchNode =
                     currentNode.getChildNode(currentChar);
@@ -101,11 +104,10 @@ public class WordSearchTrie {
     private void addWord(String word, CharacterNode currentNode, int level) {
         if (word.length() > 0) {
             level++;
-
             CharacterNode childNode = new CharacterNode(word.charAt(0));
 
 //            if (MainWordSearch.DEBUG) {
-//                System.out.println("current char: " + word.charAt(0));
+//                System.out.println(currentNode);
 //            }
 
             childNode = currentNode.addChild(childNode, level);
@@ -123,7 +125,9 @@ public class WordSearchTrie {
     }
 
     private void setupWordSearchTree(String filePath) {
-        System.out.println("Setting up the word search tree...");
+        if (MainWordSearch.DEBUG) {
+            System.out.println("Setting up the word search trie...");
+        }
 
         try (Scanner scanner = new Scanner(
                 new FileReader(filePath))) {
@@ -140,7 +144,9 @@ public class WordSearchTrie {
             System.out.println(fileNotFoundException.getMessage());
         }
 
-        System.out.println("Finished...");
+        if (MainWordSearch.DEBUG) {
+            System.out.println("Finished setting up word trie...");
+        }
     }
 
 //    // Mostly for debugging purposes (couldn't possibly print the entire tree

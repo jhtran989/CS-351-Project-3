@@ -1,7 +1,6 @@
 package gamePieces;
 
 import constants.AnchorType;
-import constants.InsideOutsideAnchor;
 import constants.PlayDirection;
 
 public class Anchor {
@@ -9,7 +8,8 @@ public class Anchor {
     private PlayDirection secondaryDirection;
     private AnchorType primaryAnchorType;
     private AnchorType secondaryAnchorType;
-    private int leftLimit;
+    private int primaryLeftLimit;
+    private int secondaryLeftLimit;
 //    private boolean crossCheckHorizontal;
 //    private boolean crossCheckVertical;
 
@@ -24,7 +24,8 @@ public class Anchor {
 //        crossCheckHorizontal = false;
 //        crossCheckVertical = false;
 
-        leftLimit = 0; // default value...
+        primaryLeftLimit = 0; // default value...
+        secondaryLeftLimit = 0; // default value...
     }
 
 //    public void printCrossChecks() {
@@ -71,8 +72,13 @@ public class Anchor {
         return secondaryDirection;
     }
 
-    public void setLeftLimit(int leftLimit) {
-        this.leftLimit = leftLimit;
+    public void setLeftLimit(int leftLimit,
+                             PlayDirection playDirection) {
+        if (playDirection == primaryDirection) {
+            this.primaryLeftLimit = leftLimit;
+        } else {
+            this.secondaryLeftLimit = leftLimit;
+        }
     }
 
     public AnchorType getPrimaryAnchorType() {
@@ -83,7 +89,11 @@ public class Anchor {
         return secondaryAnchorType;
     }
 
-    public int getLeftLimit() {
-        return leftLimit;
+    public int getLeftLimit(PlayDirection playDirection) {
+        if (playDirection == primaryDirection) {
+            return primaryLeftLimit;
+        } else {
+            return secondaryLeftLimit;
+        }
     }
 }
