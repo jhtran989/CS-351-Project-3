@@ -38,9 +38,12 @@ public class WordSearchTrie {
         return root;
     }
 
+    // assuming the characters of the word can be lowercase or uppercase (and
+    // any dictionary given will have lowercase words) where uppercase is
+    // from the blank tiles...
     private boolean searchWord(String word, CharacterNode currentNode) {
         if (word.length() > 0) {
-            char currentChar = word.charAt(0);
+            char currentChar = Character.toLowerCase(word.charAt(0));
 
             if (MainWordSearch.DEBUG) {
                 if (currentNode == root) {

@@ -1,6 +1,11 @@
 package gamePieces;
 
 public class Tile {
+    // assuming the character for a blank character is an asterisk '*', which
+    // will also be referenced in the WordSolver class to execute the special
+    // check for a blank tile
+    public static final char BLANK_LETTER = '*';
+
     private char letter;
     private int value;
 
@@ -19,6 +24,22 @@ public class Tile {
     public Tile(Tile tile) {
         this.letter = tile.letter;
         this.value = tile.value;
+    }
+
+    public static boolean isBlankTile(Tile tile) {
+        if (tile.letter == BLANK_LETTER) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void updateBlankLetter(char letter) {
+        this.letter = letter;
+    }
+
+    public void returnBlankLetter() {
+        this.letter = BLANK_LETTER;
     }
 
     public char getLetter() {

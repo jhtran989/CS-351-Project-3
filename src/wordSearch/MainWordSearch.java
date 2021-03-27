@@ -2,6 +2,7 @@ package wordSearch;
 
 import constants.InputChoice;
 import gamePieces.TileBag;
+import gamePieces.WordInPlay;
 
 import java.util.*;
 
