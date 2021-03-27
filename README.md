@@ -5,7 +5,7 @@
 
 ### Introduction
 
-All `List` objects were implemented as an `ArrayList`.
+
 
 ### Instructions
 
@@ -17,7 +17,24 @@ java -jar JAR_NAME
 ```
 where `JAR_NAME` is the name of the jar file. The `.jar` for the console is `dominosConsole.jar` and the one for the GUI is `dominosGUI.jar`.
 
+For the input into the word solver, I decided place it in an infinite (while) loop and it will hopefully remove any new line characters in between inputs (`\n`). However, keeping to the format of the input, it assumes all the info for a given input (dimension of board, board itself, and rack) will be grouped together with no blank lines in between the info.
+
+### Design Overview
+
+
+
 ### Critical Design choices
+
+All `List` objects were implemented as an `ArrayList`.
+
+(x2 of stuff)
+
+The `class Tile` will contain the `public static final` variable for the character representation of the blank tile in the file to load the tiles used in the game (in this case, `scrabble_tiles.txt` is just used and set in the constructor of the `class TileBag`). Assuming the character for a blank character is an asterisk '*', which
+will also be referenced in the `WordSolver class` to execute the special
+check for a blank tile (specifically, the `leftPart()` and `extendRight()` methods).
+Edit: a `static` method `isBlankTile()` will be used instead since there's no way to know beforehand what character will be used to represent the blank tile (hence, why there's a `static` field that can be changed as needed).
+
+Furthermore, the `Tile` objects in the `TileBag` and `Rack` classes will be stored in a map for easy retrieval and convenience. For `TileBag`, a sort of frequency map is used where the `Tile` object represents the key and the frequency of those tiles (with the same letter) represents the value (decremented each time one of those tiles is removed and drawn by a player). However, `Rack` uses the actual character representation of the `Tile` object as its value to allow for easy searching of a tile given a character.
 
 Below are some instance variables in the `class WordSolver` where the prefix `current-` was used in the variable name that holds key information during the move generation...
 
@@ -57,24 +74,30 @@ In the `class WordSovler`, I didn't have enough time to account for the possibil
 
 ### Afternotes
 
+There were a few types of `public static final boolean` "DEBUG" variables in various "Main" classes that contain the `main()` method used for debugging purposes (as opposed to just one or so in the previous project) and this time, I made sure that the code should be fully functional even without the debug "flags" turned on.
+
+As was the case in the previous project, there is a `utilities` package that housed classes with all `static` methods for utility purposes (like parsing input).
+
 - The
 ```java
 boolean activeMultiplier
 ```
 member variable in the `class BoardSquare` wasn't needed in the end since I hardcoded all the multipliers for the different types of board squares on the board (in the `enum BoardSquareType`)
 
-- In the `checkWordAlongDirection()` method in the `class WordSovler`, I couldn't find a better way to create a "dummy" reference for the next `BoardSquare`. So, I just ended up created a "dummy" `List` that held the reference to some `BoardSquare` and was cleared each time before I needed to hold another `BoardSquare` reference.   
+- In the `checkWordAlongDirection()` method in the `class WordSovler`, I couldn't find a better way to create a "dummy" reference for the next `BoardSquare`. So, I just ended up created a "dummy" `List` that held the reference to some `BoardSquare` and was cleared each time before I needed to hold another `BoardSquare` reference (pointers would probably make it a bit simpler...).   
 Edit: I faced a similar issue in other methods as well (for example,  `firstPartCrossCheck()` and `secondPartCrossCheck()` methods in the `class WordSovler` as well)
 
 - In the `class BoardSquare`, the input of characters from the file/console is a little wonky since I used the `next()` method of the `class Scanner` to get the next "square" in the row of the input &mdash; this means that only one character was read for that tile (since the character before the letter, if the square contained a letter, is just a space and ignored by `next()`). So, the member variable `char twoChar` to hold the raw input had to be modified specifically for a letter square (had to put a space before the letter so the board could be printed out correctly).
 
 - When dealing with different input formats, I found that I needed to only use one `Scanner` object for the entire main (for any given main). So, there was a little inconsistency with how the `try with resources` was used inside the classes that needed input from files (i.e. `class Board`) and a `Scanner` object was used as a constructor parameter for those same classes if the input was read from the console.
 
-- There were some inconsistencies with the naming of methods, specifically pertaining to the split of the "left" and "right" parts mentioned in the Appel and Jacobson paper. For instance, sometimes I'd use the prefix `primar-` and `secondary-` together, or `first-` and `second-`, or even `left-` and `right-` in various parts of the code. Generally, though, though should mean the same thing as I was going through different stages and decided to generalize the meaning (regardless if the orientation of the word was "horizontal" or "vertical" on the board).
+- There were some inconsistencies with the naming of methods, specifically pertaining to the split of the "left" and "right" parts mentioned in the Appel and Jacobson paper. For instance, sometimes I'd use the prefix `primar-` and `secondary-` together, or `first-` and `second-`, or even `left-` and `right-` in various parts of the code. Generally, though, though should mean the same thing as I was going through different stages and decided to generalize the meaning (regardless if the orientation of the word was "horizontal" or "vertical" on the board). In addition, there were inconsistencies with how instance variables were accessed in the classes that housed them. Specifically, whether the instance variable was accessed directly or via the corresponding `get` method (shouldn't really matter, though).
 
 - When initializing the cross check `Set` for the `OUTSIDE` type anchors and various data structures (`List`, `Set`, `Map`, etc.) to store information about the tiles, children nodes of the trie, etc., I decided to rely on Java's autoboxing of `char` into `Character` objects. This is because of the essentially static object that is created from a primitive type and this allowed me to create a static set of letters to use &mdash; really useful for using them as the `key` for a `Map` and allows for really quick searches.
 
 - This next point follows from the previous, but when creating the cross check sets, I wanted to remove any `Character` objects from the set as I iterated through it (checking to see if there are nearby `Letter` board squares that can form words with the current anchor square being checked). So, the easiest option was to use an `Iterator` object of the set that avoided any concurrent exceptions when iterating through the set.
+
+-
 
 ### Resources
 
