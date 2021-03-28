@@ -38,6 +38,139 @@ public class WordSearchTrie {
         return root;
     }
 
+    public CharacterNode getYoungestChild(String leftPart) {
+        return getYoungestChild(leftPart, root);
+    }
+
+    /**
+     * Precondition: leftPart is a valid prefix in the given dictionary
+     *
+     * @param leftPart
+     * @param currentNode
+     * @return
+     */
+    private CharacterNode getYoungestChild(String leftPart,
+                                          CharacterNode currentNode) {
+        if (leftPart.length() > 0) {
+            char currentChar = Character.toLowerCase(leftPart.charAt(0));
+
+            if (MainWordSearch.DEBUG) {
+                if (currentNode == root) {
+                    System.out.print("Root: ");
+                }
+
+                System.out.println(currentNode);
+            }
+
+            CharacterNode searchNode;
+
+//            // FIXME: add something for a blank tile...
+//            if (currentChar == '*') {
+//                System.out.println("Asterisk found...");
+//
+//                // Will search using every character given in the tile bag
+//                // (set of available tiles -- for the usual game, just the 26
+//                // letters of the alphabet) and return the earliest found
+//                // word in the given dictionary
+//                for (Character specialCharacter : fullLetterSet) {
+//                    if (MainWordSearch.DEBUG) {
+//                        System.out.println("Current char: " + specialCharacter +
+//                                " (level " + currentNode.getLevel() + ")");
+//                    }
+//
+//                    searchNode = currentNode.getChildNode(
+//                            specialCharacter);
+//
+//                    if (searchNode != null) {
+//                        boolean foundSpecialWord = searchWord(
+//                                word.substring(1),
+//                                searchNode);
+//
+//                        if (foundSpecialWord) {
+//                            return true;
+//                        }
+//                    }
+//                }
+//
+//                return false;
+//            }
+
+            searchNode =
+                    currentNode.getChildNode(currentChar);
+
+            if (searchNode != null) {
+                return getYoungestChild(leftPart.substring(1),
+                        searchNode);
+            } else {
+                return null; // shouldn't happen if the precondition was met...
+            }
+        } else {
+            return currentNode;
+        }
+    }
+
+    private boolean searchLeftPart(String leftPart, CharacterNode currentNode) {
+        if (leftPart.length() > 0) {
+            char currentChar = Character.toLowerCase(leftPart.charAt(0));
+
+            if (MainWordSearch.DEBUG) {
+                if (currentNode == root) {
+                    System.out.print("Root: ");
+                }
+
+                System.out.println(currentNode);
+            }
+
+            CharacterNode searchNode;
+
+//            // FIXME: add something for a blank tile...
+//            if (currentChar == '*') {
+//                System.out.println("Asterisk found...");
+//
+//                // Will search using every character given in the tile bag
+//                // (set of available tiles -- for the usual game, just the 26
+//                // letters of the alphabet) and return the earliest found
+//                // word in the given dictionary
+//                for (Character specialCharacter : fullLetterSet) {
+//                    if (MainWordSearch.DEBUG) {
+//                        System.out.println("Current char: " + specialCharacter +
+//                                " (level " + currentNode.getLevel() + ")");
+//                    }
+//
+//                    searchNode = currentNode.getChildNode(
+//                            specialCharacter);
+//
+//                    if (searchNode != null) {
+//                        boolean foundSpecialWord = searchWord(
+//                                word.substring(1),
+//                                searchNode);
+//
+//                        if (foundSpecialWord) {
+//                            return true;
+//                        }
+//                    }
+//                }
+//
+//                return false;
+//            }
+
+            searchNode =
+                    currentNode.getChildNode(currentChar);
+
+            if (searchNode != null) {
+                return searchLeftPart(leftPart.substring(1),
+                        searchNode);
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+    public boolean searchLeftPart(String leftPart) {
+        return searchWord(leftPart, root);
+    }
+
     // assuming the characters of the word can be lowercase or uppercase (and
     // any dictionary given will have lowercase words) where uppercase is
     // from the blank tiles...

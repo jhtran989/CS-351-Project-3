@@ -22,8 +22,8 @@ public class BoardSquare {
     private boolean bottomEdge;
     private boolean rightEdge;
     private boolean leftEdge;
-    private boolean crossCheck;
-    private Set<Character> crossCheckList;
+    private Set<Character> crossCheckSetHorizontal;
+    private Set<Character> crossCheckSetVertical;
     private boolean activeMultiplier;
     private Tile activeTile;
     Set<Character> fullLetterSet;
@@ -62,8 +62,8 @@ public class BoardSquare {
             rightEdge = true;
         }
 
-        crossCheck = false;
-        crossCheckList = generateCrossCheckSet();
+        crossCheckSetHorizontal = generateCrossCheckSet();
+        crossCheckSetVertical = generateCrossCheckSet();
 
         activeMultiplier = true;
         activeTile = null;
@@ -73,6 +73,26 @@ public class BoardSquare {
 
         crossCheckHorizontal = false;
         crossCheckVertical = false;
+    }
+
+    /**
+     * Should be the only static method in this class...
+     * Called only on special anchor squares - more specifically, on those
+     * with multiple reference words (like when two words already on the board
+     * form a cross, the four "corner" squares that touch both words)
+     *
+     * @param boardSquare
+     */
+    public static void mergeCrossCheckSets(BoardSquare boardSquare) {
+        Set<Character> crossCheckSetHorizontal =
+                boardSquare.getCrossCheckSet(
+                        PlayDirection.HORIZONTAL);
+        Set<Character> crossCheckSetVertical =
+                boardSquare.getCrossCheckSet(
+                        PlayDirection.VERTICAL);
+
+        crossCheckSetHorizontal.retainAll(crossCheckSetVertical);
+        crossCheckSetVertical.retainAll(crossCheckSetHorizontal);
     }
 
     public void printCrossChecks() {
@@ -89,6 +109,26 @@ public class BoardSquare {
         }
     }
 
+    public Set<Character> getCrossCheckSet(PlayDirection playDirection) {
+        if (playDirection == PlayDirection.HORIZONTAL) {
+            return crossCheckSetVertical;
+        } else {
+            return crossCheckSetHorizontal;
+        }
+    }
+
+    private Set<Character> generateCrossCheckSet() {
+        Set<Character> copySet = new TreeSet<>();
+
+        if (boardSquareType == BoardSquareType.LETTER) {
+            copySet.add(letter);
+        } else {
+            copySet.addAll(fullLetterSet);
+        }
+
+        return copySet;
+    }
+
     public void initiateCrossChecks(PlayDirection playDirection) {
         AnchorType primaryAnchorType = anchor.getPrimaryAnchorType();
         AnchorType secondaryAnchorType = anchor.getSecondaryAnchorType();
@@ -96,7 +136,10 @@ public class BoardSquare {
         if (primaryAnchorType != null &&
                 primaryAnchorType.getInsideOutsideAnchor()
                         == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
-            if (boardSquareType != BoardSquareType.LETTER) {
+            if (boardSquareType != BoardSquareType.LETTER) { // may seem
+                // redundant, but it's here to check if the OUTSIDE ANCHOR
+                // SQUARE isn't already covered by a tile (no use checking
+                // since only one letter is applicable...)
                 if (playDirection == PlayDirection.HORIZONTAL) {
                     crossCheckVertical = true;
                 } else {
@@ -154,22 +197,6 @@ public class BoardSquare {
 
         activeTile = tile;
         activeMultiplier = false;
-    }
-
-    public Set<Character> getCrossCheckList() {
-        return crossCheckList;
-    }
-
-    private Set<Character> generateCrossCheckSet() {
-        Set<Character> copySet = new TreeSet<>();
-
-        if (boardSquareType == BoardSquareType.LETTER) {
-            copySet.add(letter);
-        } else {
-            copySet.addAll(fullLetterSet);
-        }
-
-        return copySet;
     }
 
     public void resetCheckPlayDirection() {
@@ -327,5 +354,13 @@ public class BoardSquare {
     public void printFullBoardSquareInfo() {
         System.out.println("Letter " + letter + " row index: " + rowIndex +
                 " column index: " + columnIndex);
+    }
+
+    public static void printFullBoardSquareInfo(BoardSquare boardSquare) {
+        if (boardSquare == null) {
+            System.out.println("Empty board square");
+        } else {
+            boardSquare.printFullBoardSquareInfo();
+        }
     }
 }

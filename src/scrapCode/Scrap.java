@@ -13,6 +13,99 @@ import java.util.List;
 
 public class Scrap {
 
+    //    /**
+//     * Checks if there is a letter in the board two squares "behind" in in
+//     * the word play direction (so when we're left extending, we don't
+//     * over check with the word "behind" it)
+//     *
+//     * @param boardSquare
+//     * @param playDirection
+//     * @return
+//     */
+//    private boolean checkLeftExtend(BoardSquare boardSquare,
+//                                    PlayDirection playDirection) {
+//        BoardSquare previousBoardSquare = boardSquare;
+//
+//        for (int i = 0; i < 2; i++) {
+//            previousBoardSquare =
+//                    getBoardSquareInCheckDirection(
+//                            previousBoardSquare,
+//                            playDirection
+//                                    .getReverseCheckDirection());
+//            if (previousBoardSquare == null) {
+//                return true;
+//            } else if (previousBoardSquare.getBoardSquareType()
+//                    == BoardSquareType.LETTER) {
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    }
+
+    //    private int findLeftLimitAnchor(BoardSquare boardSquare,
+//                                    PlayDirection playDirection) {
+//        int leftLimit = 0;
+//        BoardSquare previousBoardSquare = getBoardSquareInCheckDirection(
+//                boardSquare,
+//                playDirection.getReverseCheckDirection());
+//
+//        while (previousBoardSquare != null) {
+//            if (previousBoardSquare.getBoardSquareType()
+//                    == BoardSquareType.LETTER) {
+//                return leftLimit - 1; // so the left part doesn't touch
+//                // another word
+//            }
+//
+//            // FIXME: fix 1
+//            previousBoardSquare = getBoardSquareInCheckDirection(
+//                    previousBoardSquare,
+//                    playDirection.getReverseCheckDirection());
+//            leftLimit++;
+//        }
+//
+//        return leftLimit;
+//    }
+
+    //            for (Map.Entry<Character, CharacterNode> childNodeEntry
+//                    : currentNode.getChildrenMap().entrySet()) {
+//                currentCharacter = childNodeEntry.getKey();
+//                Tile currentTile = rack.searchLetter(
+//                        currentCharacter);
+//
+//                if (currentTile != null) {
+//                    // FIXME
+////                    WordInPlay newLeftPart = new WordInPlay(
+////                            currentLeftPart);
+////                    newLeftPart.updateLeftPartWord(
+////                            currentCharacter);
+////                    partialWord.updateWord(currentCharacter);
+//
+//                    rack.removeTile(currentTile);
+//
+//                    updateBlankTile(currentTile);
+//                    updateLeftPart(playDirection);
+//
+//                    leftPart(new WordInPlay(currentLeftPart),
+//                            childNodeEntry.getValue(),
+//                            leftLimit - 1, anchorSquare,
+//                            playDirection);
+//
+//                    rack.addTile(currentTile);
+//
+//                    revertBlankTile(currentTile);
+//                    revertLeftPart(currentTile,
+//                            anchorSquare);
+//                } else {
+//                    //FIXME
+//                    if (MainWordSolver.WORD_RECURSIVE) {
+//                        System.out.println();
+//                        System.out.println("Letter not in rack: " +
+//                                currentCharacter);
+//                    }
+//                }
+//            }
+
     // FIXME
 //            WordInPlay blankPrimaryWordInPlay = new WordInPlay(
 //                    primaryPlayDirection, "",

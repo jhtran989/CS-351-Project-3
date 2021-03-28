@@ -26,6 +26,10 @@ public class Rack {
         printRack();
     }
 
+    public Map<Tile, Character> getRackMap() {
+        return rackMap;
+    }
+
     public Tile searchLetter(Character letter) {
         for (Map.Entry<Tile, Character> tileCharacterEntry :
                 rackMap.entrySet()) {

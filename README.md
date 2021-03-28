@@ -56,6 +56,8 @@ I decided to include a `List` of `BoardSquare` objects when finding the possible
 
 ### Assumptions
 
+This would have been an easy fix, but I assumed any dictionary passed into the word trie will only contain lowercase words. Also, I assumed the tiles file used for the game has lowercase letters as well (otherwise, those letters wouldn't be added to the bag of tiles).
+
 For the GUI version, I decided that the human player would always go first (so the word solver doesn't go checking the entire board...). Also, I assumed the tile bag (for any file to initialize the tiles in the bag the players draw from) only contained letters in the alphabet ('a' to 'z').
 
 ### doc Note
@@ -74,9 +76,11 @@ In the `class WordSovler`, I didn't have enough time to account for the possibil
 
 ### Afternotes
 
-There were a few types of `public static final boolean` "DEBUG" variables in various "Main" classes that contain the `main()` method used for debugging purposes (as opposed to just one or so in the previous project) and this time, I made sure that the code should be fully functional even without the debug "flags" turned on.
+- Any static methods will generally be at the top of the class, but they are few and far in between (mostly in the `utilities` package mentioned below).
 
-As was the case in the previous project, there is a `utilities` package that housed classes with all `static` methods for utility purposes (like parsing input).
+- There were a few types of `public static final boolean` "DEBUG" variables in various "Main" classes that contain the `main()` method used for debugging purposes (as opposed to just one or so in the previous project) and this time, I made sure that the code should be fully functional even without the debug "flags" turned on.
+
+- As was the case in the previous project, there is a `utilities` package that housed classes with all `static` methods for utility purposes (like parsing input).
 
 - The
 ```java
@@ -96,8 +100,6 @@ Edit: I faced a similar issue in other methods as well (for example,  `firstPart
 - When initializing the cross check `Set` for the `OUTSIDE` type anchors and various data structures (`List`, `Set`, `Map`, etc.) to store information about the tiles, children nodes of the trie, etc., I decided to rely on Java's autoboxing of `char` into `Character` objects. This is because of the essentially static object that is created from a primitive type and this allowed me to create a static set of letters to use &mdash; really useful for using them as the `key` for a `Map` and allows for really quick searches.
 
 - This next point follows from the previous, but when creating the cross check sets, I wanted to remove any `Character` objects from the set as I iterated through it (checking to see if there are nearby `Letter` board squares that can form words with the current anchor square being checked). So, the easiest option was to use an `Iterator` object of the set that avoided any concurrent exceptions when iterating through the set.
-
--
 
 ### Resources
 

@@ -38,7 +38,7 @@ public class Tile {
         this.letter = letter;
     }
 
-    public void returnBlankLetter() {
+    public void revertBlankLetter() {
         this.letter = BLANK_LETTER;
     }
 
