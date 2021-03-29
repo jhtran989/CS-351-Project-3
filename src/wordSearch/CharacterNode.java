@@ -11,12 +11,14 @@ public class CharacterNode {
     public CharacterNode(char character) {
         this.character = character;
         terminalNode = false;
+        childrenMap = new TreeMap<>();
     }
 
     // Only used for the construction of the root node in the tree
     public CharacterNode() {
         character = ' ';
         terminalNode = false;
+        childrenMap = new TreeMap<>();
         level = 0;
     }
 
@@ -37,10 +39,6 @@ public class CharacterNode {
     }
 
     public CharacterNode addChild(CharacterNode childNode, int level) {
-        if (childrenMap == null) {
-            childrenMap = new TreeMap<>();
-        }
-
         char childCharacter = childNode.getCharacter();
         CharacterNode currentChildNode = childrenMap.get(childCharacter);
 

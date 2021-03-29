@@ -10,11 +10,12 @@ import java.util.Scanner;
 
 public class MainWordSolver {
     public static final boolean WORDS_IN_PLAY = true;
-    public static final boolean ANCHOR_DEBUG = true;
-    //public static final boolean LEFT_RIGHT_DEBUG = true;
+    public static final boolean ANCHOR_DEBUG = false;
+    public static final boolean LEFT_LIMIT = false;
     public static final boolean WORD_RECURSIVE = false;
     public static final boolean FIND_LEGAL_WORD = false;
-    public static final boolean HIGHEST_SCORING_MOVE = false;
+    public static final boolean PRINT_LEGAL_WORD = true;
+    public static final boolean HIGHEST_SCORING_MOVE = true;
 
     public static void main(String[] args) {
         try (Scanner scanner =

@@ -6,25 +6,25 @@ public enum AnchorType {
 //            InsideOutsideAnchor.INSIDE_ANCHOR),
     PRIMARY_CENTER_HEAD(true,
             InsideOutsideAnchor.INSIDE_ANCHOR),
-    PRIMATE_SIDE_HEAD(true,
+    PRIMARY_SIDE_HEAD(true,
             InsideOutsideAnchor.OUTSIDE_ANCHOR),
-    PRIMARY_BODY(false,
+    PRIMARY_SIDE_BODY(false,
             InsideOutsideAnchor.OUTSIDE_ANCHOR),
     SECONDARY_END(true,
             InsideOutsideAnchor.OUTSIDE_ANCHOR),
     SECONDARY_BODY(true,
             InsideOutsideAnchor.INSIDE_ANCHOR);
 
-    private boolean pivotLeft;
+    private boolean leftExtend;
     private InsideOutsideAnchor insideOutsideAnchor;
 
-    AnchorType(boolean pivotLeft, InsideOutsideAnchor insideOutsideAnchor) {
-        this.pivotLeft = pivotLeft;
+    AnchorType(boolean leftExtend, InsideOutsideAnchor insideOutsideAnchor) {
+        this.leftExtend = leftExtend;
         this.insideOutsideAnchor = insideOutsideAnchor;
     }
 
-    public boolean isPivotLeft() {
-        return pivotLeft;
+    public boolean isLeftExtend() {
+        return leftExtend;
     }
 
     public InsideOutsideAnchor getInsideOutsideAnchor() {
@@ -39,10 +39,10 @@ public enum AnchorType {
             case PRIMARY_CENTER_HEAD:
                 initialPart = "Anchor type: PRIMARY CENTER HEAD";
                 break;
-            case PRIMATE_SIDE_HEAD:
+            case PRIMARY_SIDE_HEAD:
                 initialPart = "Anchor type: PRIMARY SIDE HEAD";
                 break;
-            case PRIMARY_BODY:
+            case PRIMARY_SIDE_BODY:
                 initialPart = "Anchor type: PRIMARY BODY";
                 break;
             case SECONDARY_END:
@@ -55,7 +55,7 @@ public enum AnchorType {
                 initialPart = "EMPTY";
         }
 
-        return initialPart + " pivot left: " + pivotLeft + " " +
+        return initialPart + " pivot left: " + leftExtend + " " +
                 insideOutsideAnchor;
     }
 

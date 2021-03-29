@@ -43,7 +43,10 @@ public class WordSearchTrie {
     }
 
     /**
-     * Precondition: leftPart is a valid prefix in the given dictionary
+     * Precondition: leftPart is a valid prefix in the given dictionary...
+     * except that there's nontrivial checks for the left part, so we return
+     * null early if at any point in the leftPart, there's no node that can
+     * be extended
      *
      * @param leftPart
      * @param currentNode
@@ -95,14 +98,18 @@ public class WordSearchTrie {
 //                return false;
 //            }
 
-            searchNode =
-                    currentNode.getChildNode(currentChar);
+            if (currentNode != null) {
+                searchNode =
+                        currentNode.getChildNode(currentChar);
 
-            if (searchNode != null) {
-                return getYoungestChild(leftPart.substring(1),
-                        searchNode);
+                if (searchNode != null) {
+                    return getYoungestChild(leftPart.substring(1),
+                            searchNode);
+                } else {
+                    return null; // shouldn't happen if the precondition was met...
+                }
             } else {
-                return null; // shouldn't happen if the precondition was met...
+                return null;
             }
         } else {
             return currentNode;

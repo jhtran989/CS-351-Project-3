@@ -1,6 +1,7 @@
 package gamePieces;
 
 import constants.*;
+import wordSolver.MainWordSolver;
 
 import java.util.List;
 import java.util.Set;
@@ -132,6 +133,51 @@ public class BoardSquare {
     public void initiateCrossChecks(PlayDirection playDirection) {
         AnchorType primaryAnchorType = anchor.getPrimaryAnchorType();
         AnchorType secondaryAnchorType = anchor.getSecondaryAnchorType();
+
+        if (MainWordSolver.ANCHOR_DEBUG) {
+            System.out.println();
+            System.out.println("Word play direction " + playDirection);
+            System.out.println(primaryAnchorType);
+            System.out.println(secondaryAnchorType);
+        }
+
+        if (primaryAnchorType != null &&
+                primaryAnchorType.getInsideOutsideAnchor()
+                        == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
+            if (boardSquareType != BoardSquareType.LETTER) { // may seem
+                // redundant, but it's here to check if the OUTSIDE ANCHOR
+                // SQUARE isn't already covered by a tile (no use checking
+                // since only one letter is applicable...)
+                if (playDirection == PlayDirection.HORIZONTAL) {
+                    crossCheckVertical = true;
+                } else {
+                    crossCheckHorizontal = true;
+                }
+            }
+        }
+
+        if (secondaryAnchorType != null &&
+                secondaryAnchorType.getInsideOutsideAnchor()
+                        == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
+            if (boardSquareType != BoardSquareType.LETTER) {
+                if (playDirection == PlayDirection.HORIZONTAL) {
+                    crossCheckHorizontal = true;
+                } else {
+                    crossCheckVertical = true;
+                }
+            }
+        }
+    }
+
+    public void initiateCrossChecks(PlayDirection playDirection,
+                                    AnchorType primaryAnchorType,
+                                    AnchorType secondaryAnchorType) {
+        if (MainWordSolver.ANCHOR_DEBUG) {
+            System.out.println();
+            System.out.println("Word play direction " + playDirection);
+            System.out.println(primaryAnchorType);
+            System.out.println(secondaryAnchorType);
+        }
 
         if (primaryAnchorType != null &&
                 primaryAnchorType.getInsideOutsideAnchor()

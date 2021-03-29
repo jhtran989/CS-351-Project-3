@@ -5,6 +5,7 @@ public class Tile {
     // will also be referenced in the WordSolver class to execute the special
     // check for a blank tile
     public static final char BLANK_LETTER = '*';
+    public static final int BLANK_VALUE = 0;
 
     private char letter;
     private int value;
@@ -27,7 +28,7 @@ public class Tile {
     }
 
     public static boolean isBlankTile(Tile tile) {
-        if (tile.letter == BLANK_LETTER) {
+        if (tile.letter == BLANK_LETTER || tile.getValue() == BLANK_VALUE) {
             return true;
         }
 

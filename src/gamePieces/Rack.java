@@ -58,7 +58,11 @@ public class Rack {
     }
 
     public void addTile(Tile tile) {
-        rackMap.put(tile, tile.getLetter());
+        if (Tile.isBlankTile(tile)) {
+            rackMap.put(tile, BLANK_LETTER);
+        } else {
+            rackMap.put(tile, tile.getLetter());
+        }
     }
 
     // FIXME: fix mapping and update frequency (decrement)... (so there's
@@ -89,7 +93,7 @@ public class Rack {
         }
     }
 
-    private void printRack() {
+    public void printRack() {
         System.out.println("Rack: ");
 
         int count = 0;

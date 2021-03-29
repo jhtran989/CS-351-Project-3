@@ -21,7 +21,9 @@ For the input into the word solver, I decided place it in an infinite (while) lo
 
 ### Design Overview
 
+When searching for anchor squares, the `INSIDE` anchor squares are prioritized in that if an anchor square overlaps across different reference word, then the `INSIDE` anchor square is added over the `OUTSIDE` one since the `INSIDE` anchor squares always have a possible left part to check (whereas the `OUTSIDE` only has a left part on the `PRIMARY_HEAD`).
 
+When finding the left limit of an applicable anchor square (not a `PRIMARY_SIDE_BODY`), the paper describes to check up to an anchor square. However, I find that having to keep check of anchor squares of a given word in play is quite tedious, so I found a workaround. Since we know that `OUTSIDE` anchor squares are always on square away from all directions of a given word, I just check if a square is a letter and subtract 1 from the current left limit.
 
 ### Critical Design choices
 

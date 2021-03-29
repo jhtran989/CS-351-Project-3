@@ -13,6 +13,102 @@ import java.util.List;
 
 public class Scrap {
 
+    //            for (Map.Entry<Character, CharacterNode> childNodeEntry
+//                    : currentNode.getChildrenMap().entrySet()) {
+//                currentCharacter = childNodeEntry.getKey();
+//                Tile currentTile = rack.searchLetter(
+//                        currentCharacter);
+//
+//                if (currentTile != null) {
+//                    // FIXME
+////                    WordInPlay newLeftPart = new WordInPlay(
+////                            currentLeftPart);
+////                    newLeftPart.updateLeftPartWord(
+////                            currentCharacter);
+////                    partialWord.updateWord(currentCharacter);
+//
+//                    rack.removeTile(currentTile);
+//
+//                    updateBlankTile(currentTile);
+//                    updateLeftPart(playDirection);
+//
+//                    leftPart(new WordInPlay(currentLeftPart),
+//                            childNodeEntry.getValue(),
+//                            leftLimit - 1, anchorSquare,
+//                            playDirection);
+//
+//                    rack.addTile(currentTile);
+//
+//                    revertBlankTile(currentTile);
+//                    revertLeftPart(currentTile,
+//                            anchorSquare);
+//                } else {
+//                    //FIXME
+//                    if (MainWordSolver.WORD_RECURSIVE) {
+//                        System.out.println();
+//                        System.out.println("Letter not in rack: " +
+//                                currentCharacter);
+//                    }
+//                }
+//            }
+
+    //    /**
+////     * Checks if the given board square was already added as an anchor square
+////     * (overlapping anchor squares should only be counted once since the
+////     * orientation could just be rotated to cover both play directions)
+////     *
+////     * @param boardSquare
+////     * @param playDirection
+////     * @return
+////     */
+////    private boolean checkNewAnchorSquare(BoardSquare boardSquare,
+////                                         PlayDirection playDirection) {
+////        BoardSquare previousBoardSquare = boardSquare;
+////
+////        for (int i = 0; i < 2; i++) {
+////            previousBoardSquare =
+////                    getBoardSquareInCheckDirection(
+////                            previousBoardSquare,
+////                            playDirection
+////                                    .getReverseCheckDirection());
+////            if (previousBoardSquare == null) {
+////                return true;
+////            } else if (previousBoardSquare.getBoardSquareType()
+////                    == BoardSquareType.LETTER) {
+////                return false;
+////            }
+////        }
+////
+////        return true;
+////    }
+
+    //    private void addAnchorSquare(BoardSquare boardSquare,
+//                                 PlayDirection wordPlayDirection,
+//                                 AnchorType primaryAnchorType,
+//                                 AnchorType secondaryAnchorType) {
+//        Anchor anchor = new Anchor(wordPlayDirection,
+//                primaryAnchorType,
+//                secondaryAnchorType);
+//        boardSquare.setAnchor(anchor);
+//        boardSquare.
+//                initiateCrossChecks(
+//                wordPlayDirection);
+//
+//        // FIXME
+//        if (MainWordSolver.ANCHOR_DEBUG) {
+//            boardSquare.printAnchorSquare();
+//        }
+//
+//        if (primaryAnchorType != null) {
+//            // FIXME: something is wrong here...
+//            anchor.setLeftLimit(findLeftLimitAnchor(
+//                    boardSquare,
+//                    wordPlayDirection), wordPlayDirection);
+//        }
+//
+//        anchorBoardSquaresList.add(boardSquare);
+//    }
+
     //    /**
 //     * Checks if there is a letter in the board two squares "behind" in in
 //     * the word play direction (so when we're left extending, we don't
