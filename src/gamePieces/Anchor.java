@@ -1,6 +1,7 @@
 package gamePieces;
 
 import constants.AnchorType;
+import constants.InsideOutsideAnchor;
 import constants.PlayDirection;
 
 public class Anchor {
@@ -10,6 +11,7 @@ public class Anchor {
     private AnchorType secondaryAnchorType;
     private int primaryLeftLimit;
     private int secondaryLeftLimit;
+    private InsideOutsideAnchor insideOutsideAnchor;
 //    private boolean crossCheckHorizontal;
 //    private boolean crossCheckVertical;
 
@@ -20,6 +22,14 @@ public class Anchor {
                 primaryDirection);
         this.primaryAnchorType = primaryAnchorType;
         this.secondaryAnchorType = secondaryAnchorType;
+
+        if (primaryAnchorType == AnchorType.PRIMARY_SIDE_HEAD
+                || primaryAnchorType == AnchorType.PRIMARY_SIDE_BODY
+                || secondaryAnchorType == AnchorType.SECONDARY_END) {
+            insideOutsideAnchor = InsideOutsideAnchor.OUTSIDE_ANCHOR;
+        }  else {
+            insideOutsideAnchor = InsideOutsideAnchor.INSIDE_ANCHOR;
+        }
 
 //        crossCheckHorizontal = false;
 //        crossCheckVertical = false;
@@ -95,5 +105,9 @@ public class Anchor {
         } else {
             return secondaryLeftLimit;
         }
+    }
+
+    public InsideOutsideAnchor getInsideOutsideAnchor() {
+        return insideOutsideAnchor;
     }
 }

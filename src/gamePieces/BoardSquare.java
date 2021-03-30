@@ -23,8 +23,8 @@ public class BoardSquare {
     private boolean bottomEdge;
     private boolean rightEdge;
     private boolean leftEdge;
-    private Set<Character> crossCheckSetHorizontal;
-    private Set<Character> crossCheckSetVertical;
+    private final Set<Character> crossCheckSetHorizontal;
+    private final Set<Character> crossCheckSetVertical;
     private boolean activeMultiplier;
     private Tile activeTile;
     Set<Character> fullLetterSet;
@@ -74,6 +74,14 @@ public class BoardSquare {
 
         crossCheckHorizontal = false;
         crossCheckVertical = false;
+    }
+
+    public int getCrossCheckWordIndex(PlayDirection wordPlayDirection) {
+        if (wordPlayDirection == PlayDirection.HORIZONTAL) {
+            return columnIndex;
+        } else {
+            return rowIndex;
+        }
     }
 
     /**
@@ -207,6 +215,14 @@ public class BoardSquare {
         }
     }
 
+    public CrossCheckWord getCrossCheckWord(PlayDirection playDirection) {
+        if (playDirection == PlayDirection.HORIZONTAL) {
+            return horizontalCrossCheckWord;
+        } else {
+            return verticalCrossCheckWord;
+        }
+    }
+
     public CrossCheckWord getHorizontalCrossCheckWord() {
         return horizontalCrossCheckWord;
     }
@@ -226,6 +242,14 @@ public class BoardSquare {
 
     public Tile getActiveTile() {
         return activeTile;
+    }
+
+    public void setActiveTile(Tile activeTile) {
+        this.activeTile = activeTile;
+    }
+
+    public void removeActiveTile() {
+        this.activeTile = null;
     }
 
     public boolean isActiveMultiplier() {
@@ -365,8 +389,8 @@ public class BoardSquare {
                 boardSquareType = BoardSquareType.WORD_MULTIPLIER_2;
             } else if (firstChar == '3') {
                 boardSquareType = BoardSquareType.WORD_MULTIPLIER_3;
-            } else { // has to be a space, which means this square represents
-                // a letter
+            } else { // has to be a letter since we're using next() from
+                // scanner (skips the spaces)
                 boardSquareType = BoardSquareType.LETTER;
                 letter = firstChar;
                 twoChar = " " + letter;
@@ -399,7 +423,7 @@ public class BoardSquare {
 
     public void printFullBoardSquareInfo() {
         System.out.println("Letter " + letter + " row index: " + rowIndex +
-                " column index: " + columnIndex);
+                " column index: " + columnIndex + " Tile: " + activeTile);
     }
 
     public static void printFullBoardSquareInfo(BoardSquare boardSquare) {

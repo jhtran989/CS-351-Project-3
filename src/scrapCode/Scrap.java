@@ -13,6 +13,72 @@ import java.util.List;
 
 public class Scrap {
 
+    //    // TODO: fix so that the board squares will temporarily have active tiles
+//    //  on them just to calculate the score and find the best move...
+//    private void addLegalWord(WordInPlay completedWord) {
+//        if (MainWordSolver.SCORE_LEGAL_WORD) {
+//            System.out.println();
+//            System.out.println("Completed word: " + completedWord);
+//            completedWord.printWordBoardSquares();
+//        }
+//
+//        int totalScore = completedWord.calculateScore();
+//        int currentWordIndex = completedWord.getFirstIndex();
+//        int startWordIndex = currentWordIndex;
+//
+//        for (BoardSquare wordBoardSquare : completedWord.getWordBoardSquares()) {
+//            CrossCheckWord horizontalCrossCheckWord =
+//                    wordBoardSquare.getHorizontalCrossCheckWord();
+//            CrossCheckWord verticalCrossCheckWord =
+//                    wordBoardSquare.getVerticalCrossCheckWord();
+//
+//            if (MainWordSolver.SCORE_LEGAL_WORD) {
+//                System.out.println();
+//                System.out.println("Current board square:");
+//                wordBoardSquare.printFullBoardSquareInfo();
+//                System.out.println("Current index");
+//            }
+//
+//            if (horizontalCrossCheckWord != null) {
+//                if (MainWordSolver.SCORE_LEGAL_WORD) {
+//                    System.out.println("Horizontal word: " +
+//                            horizontalCrossCheckWord);
+//                    System.out.println("Horizontal index: " +
+//                            horizontalCrossCheckWord.getFinalCharIndex());
+//                }
+//
+//                horizontalCrossCheckWord.setLetterChoice(completedWord
+//                        .getLetterAtIndex(currentWordIndex),
+//                        startWordIndex);
+//                totalScore += horizontalCrossCheckWord.calculateScore();
+//                horizontalCrossCheckWord.resetLetterChoice(startWordIndex);
+//            }
+//
+//            if (verticalCrossCheckWord != null) {
+//                if (MainWordSolver.SCORE_LEGAL_WORD) {
+//                    System.out.println("Vertical word: " + verticalCrossCheckWord);
+//                    System.out.println("Vertical index: " +
+//                            verticalCrossCheckWord.getFinalCharIndex());
+//                }
+//
+//                verticalCrossCheckWord.setLetterChoice(completedWord
+//                        .getLetterAtIndex(currentWordIndex),
+//                        startWordIndex);
+//                totalScore += verticalCrossCheckWord.calculateScore();
+//                verticalCrossCheckWord.resetLetterChoice(startWordIndex);
+//            }
+//
+//            currentWordIndex++;
+//        }
+//
+//        if (MainWordSolver.SCORE_LEGAL_WORD) {
+//            System.out.println("Legal word: " + completedWord + ", score: " +
+//                    totalScore);
+//        }
+//
+//        legalWordsMap.put(completedWord, totalScore);
+//    }
+
     //            for (Map.Entry<Character, CharacterNode> childNodeEntry
 //                    : currentNode.getChildrenMap().entrySet()) {
 //                currentCharacter = childNodeEntry.getKey();

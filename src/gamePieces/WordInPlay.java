@@ -193,6 +193,10 @@ public class WordInPlay {
         return rowColumnIndex;
     }
 
+    public char getLetterAtIndex(int letterIndex) {
+        return word.charAt(letterIndex - firstIndex);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj != null && this.getClass() == obj.getClass()) {

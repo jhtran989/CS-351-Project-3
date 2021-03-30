@@ -3,6 +3,7 @@ package gamePieces;
 import constants.*;
 import exceptions.InputErrorException;
 import utilities.CustomParser;
+import wordSolver.MainWordSolver;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -86,6 +87,13 @@ public class Board {
                                         boardSquareArray[i][j]
                                                 .getLetter());
                         boardSquareArray[i][j].placeTile(tile);
+
+                        if (MainWordSolver.BOARD_SETUP) {
+                            System.out.println();
+                            System.out.println("Setting up letter tile...");
+                            boardSquareArray[i][j].printFullBoardSquareInfo();
+                            System.out.println("Tile: " + tile);
+                        }
                     }
                 }
 
@@ -110,6 +118,22 @@ public class Board {
                             scanner.next(), i, j,
                             dimension,
                             tileBag.getFullLetterSet());
+
+                    if (boardSquareArray[i][j].getBoardSquareType()
+                            == BoardSquareType.LETTER) {
+                        Tile tile =
+                                tileBag.findTileInFrequencyMap(
+                                        boardSquareArray[i][j]
+                                                .getLetter());
+                        boardSquareArray[i][j].placeTile(tile);
+
+                        if (MainWordSolver.BOARD_SETUP) {
+                            System.out.println();
+                            System.out.println("Setting up letter tile...");
+                            boardSquareArray[i][j].printFullBoardSquareInfo();
+                            System.out.println("Tile: " + tile);
+                        }
+                    }
                 }
 
                 scanner.nextLine();
