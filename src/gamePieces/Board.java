@@ -16,6 +16,8 @@ public class Board {
     private TileBag tileBag;
     private Scanner scanner;
 
+    private final boolean PRINT_BOARD = true;
+
     public Board(InputChoice inputChoice, TileBag tileBag, Scanner scanner) {
         this.inputChoice = inputChoice;
         this.tileBag = tileBag;
@@ -28,11 +30,9 @@ public class Board {
             setupBoard();
         }
 
-        printBoard();
-    }
-
-    public TileBag getTileBag() {
-        return tileBag;
+        if (PRINT_BOARD) {
+            printBoard();
+        }
     }
 
     public Board(String boardFilePath, TileBag tileBag, Scanner scanner) {
@@ -41,18 +41,25 @@ public class Board {
 
         setupBoard(boardFilePath);
 
-        printBoard();
+        if (PRINT_BOARD) {
+            printBoard();
+        }
     }
 
-    //    public Board() {
-//        frequencyTile = new TreeMap<>(new TileComparator());
-//
-//        setupBoard();
-//        setupTiles();
-//
-//        printBoard();
-//        printTiles();
-//    }
+    public Board(TileBag tileBag, Scanner scanner) {
+        this.tileBag = tileBag;
+        this.scanner = scanner;
+
+        setupBoard();
+
+        if (PRINT_BOARD) {
+            printBoard();
+        }
+    }
+
+    public TileBag getTileBag() {
+        return tileBag;
+    }
 
     public BoardSquare getBoardSquare(int rowIndex, int columnIndex) {
         return boardSquareArray[rowIndex][columnIndex];
@@ -125,6 +132,12 @@ public class Board {
                                 tileBag.findTileInFrequencyMap(
                                         boardSquareArray[i][j]
                                                 .getLetter());
+
+                        if (MainWordSolver.BOARD_SETUP) {
+                            System.out.println();
+                            System.out.println("Setting up tile");
+                        }
+
                         boardSquareArray[i][j].placeTile(tile);
 
                         if (MainWordSolver.BOARD_SETUP) {
@@ -159,5 +172,33 @@ public class Board {
         }
 
         //System.out.println();
+    }
+
+    @Override
+    public String toString() {
+        String boardString = "";
+        int columnIndex = 0;
+        int rowIndex = 0;
+
+        for (BoardSquare[] boardSquares : boardSquareArray) {
+            for (BoardSquare boardSquare : boardSquares) {
+                if (columnIndex != 0) {
+                    boardString += " ";
+                }
+
+                boardString += boardSquare;
+
+                columnIndex++;
+            }
+
+            if (rowIndex != dimension - 1) {
+                boardString += "\n";
+            }
+
+            columnIndex = 0;
+            rowIndex++;
+        }
+
+        return boardString;
     }
 }

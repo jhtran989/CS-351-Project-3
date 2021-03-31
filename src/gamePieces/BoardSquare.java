@@ -36,6 +36,9 @@ public class BoardSquare {
     private CrossCheckWord horizontalCrossCheckWord;
     private CrossCheckWord verticalCrossCheckWord;
 
+    // DEBUG
+    private final boolean PARSE_BOARD_SQUARE = true;
+
     public BoardSquare(String twoChar, int rowIndex, int columnIndex,
                        int dimension, Set<Character> fullLetterSet) {
         this.twoChar = twoChar;
@@ -267,6 +270,8 @@ public class BoardSquare {
 
         activeTile = tile;
         activeMultiplier = false;
+
+        twoChar = " " + letter;
     }
 
     public void resetCheckPlayDirection() {
@@ -274,7 +279,7 @@ public class BoardSquare {
         wordVerticalCheck = true;
     }
 
-    public void checkPlayDirection(PlayDirection playDirection) {
+    public void setCheckPlayDirection(PlayDirection playDirection) {
         if (playDirection == PlayDirection.HORIZONTAL) {
             wordHorizontalCheck = false;
         } else {
@@ -376,11 +381,17 @@ public class BoardSquare {
      * valid forms described in the rubric)
      */
     private void setBoardSquareType() {
+        if (PARSE_BOARD_SQUARE) {
+            System.out.println();
+            System.out.println("Current board square: " + this + " row: "
+                    + rowIndex + " column: " + columnIndex);
+        }
+
         char firstChar = twoChar.charAt(0);
         char secondChar = ' '; // default value if there is a letter for the
         // word solver...
 
-        if (!fullLetterSet.contains(firstChar)) {
+        if (!fullLetterSet.contains(Character.toLowerCase(firstChar))) {
             secondChar = twoChar.charAt(1);
         }
 

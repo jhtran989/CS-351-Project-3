@@ -1,5 +1,10 @@
 package constants;
 
+/**
+ * Should be deprecated...since bigger boards are included in the input of
+ * the word solver and creating a lot of different multipliers is not ideal...
+ * ideal
+ */
 public enum BoardSquareType {
     LETTER(1, 1),
     LETTER_MULTIPLIER_2(2, 1),

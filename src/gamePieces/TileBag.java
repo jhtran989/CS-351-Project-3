@@ -16,6 +16,8 @@ public class TileBag {
     private InputChoice inputChoice;
     private Scanner scanner;
 
+    private final boolean PRINT_TILE_BAG = false;
+
     public TileBag(InputChoice inputChoice, Scanner scanner) {
         this.inputChoice = inputChoice;
         this.scanner = scanner;
@@ -30,7 +32,20 @@ public class TileBag {
             setupTiles();
         }
 
-        printTiles();
+        if (PRINT_TILE_BAG) {
+            printTiles();
+        }
+    }
+
+    public TileBag(String filePath) {
+        tileFrequency = new TreeMap<>(new TileComparator());
+        fullLetterSet = new TreeSet<>();
+
+        setupTiles(filePath);
+
+        if (PRINT_TILE_BAG) {
+            printTiles();
+        }
     }
 
     public Set<Character> getFullLetterSet() {
@@ -38,6 +53,32 @@ public class TileBag {
     }
 
     public Tile findTileInFrequencyMap(char letter) {
+//        // also allows for capital letters for blank tiles
+//        letter = Character.toLowerCase(letter);
+
+        if (Character.isUpperCase(letter)) {
+            Tile blank = getBlankTile();
+
+            assert blank != null;
+            blank.updateBlankLetter(letter);
+            int frequency = tileFrequency.get(blank);
+
+            if (frequency - 1 < 0) {
+                try {
+                    throw new InternalError("Out of tile " + blank
+                            + " " + "in the tile bag...");
+                } catch (InternalError internalError) {
+                    System.out.println(internalError.getMessage());
+                    System.out.println("Returning null...");
+                    return null;
+                }
+            }
+
+            frequency--;
+            tileFrequency.put(blank, frequency);
+            return blank;
+        }
+
         for (Map.Entry<Tile, Integer> tileFrequencyEntry :
                 tileFrequency.entrySet()) {
             Tile currentTile = tileFrequencyEntry.getKey();
@@ -50,6 +91,7 @@ public class TileBag {
                                 + " " + "in the tile bag...");
                     } catch (InternalError internalError) {
                         System.out.println(internalError.getMessage());
+                        break;
                     }
                 }
 
@@ -59,8 +101,21 @@ public class TileBag {
             }
         }
 
+        System.out.println("Returning null...");
+
         return null; // shouldn't happen if the board and tile files agree
         // with each other...
+    }
+
+    private Tile getBlankTile() {
+        for (Tile tile : tileFrequency.keySet()) {
+            if (tile.getLetter() == Tile.BLANK_LETTER) {
+                return tile;
+            }
+        }
+
+        return null; // shouldn't happen if our constant for the blank tile
+        // is contained in the file...
     }
 
     private void setupTiles(String filePath) {

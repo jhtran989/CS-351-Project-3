@@ -3,22 +3,19 @@ package gamePieces;
 import comparators.TileComparator;
 import wordSolver.MainWordSolver;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 import static gamePieces.Tile.BLANK_LETTER;
 
 public class Rack {
     protected Map<Tile, Character> rackMap;
     protected TileBag tileBag;
-    private Scanner scanner;
+    private final Scanner scanner;
 
     public Rack(TileBag tileBag, Scanner scanner) {
         this.scanner = scanner;
         //rackMap = new TreeMap<>(new TileComparator());
-        rackMap = new HashMap<>();
+        rackMap = new LinkedHashMap<>();
         this.tileBag = tileBag;
 
         setupRack();
@@ -101,5 +98,15 @@ public class Rack {
             System.out.println("" + letter + " " + count);
             count++;
         }
+    }
+
+    @Override
+    public String toString() {
+        String rackString = "";
+        for (Character rackLetter : rackMap.values()) {
+            rackString += rackLetter;
+        }
+
+        return rackString;
     }
 }
