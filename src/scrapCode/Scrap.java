@@ -140,7 +140,7 @@ public class Scrap {
 ////            if (previousBoardSquare == null) {
 ////                return true;
 ////            } else if (previousBoardSquare.getBoardSquareType()
-////                    == BoardSquareType.LETTER) {
+////                    == TrueBoardSquareType.LETTER) {
 ////                return false;
 ////            }
 ////        }
@@ -197,7 +197,7 @@ public class Scrap {
 //            if (previousBoardSquare == null) {
 //                return true;
 //            } else if (previousBoardSquare.getBoardSquareType()
-//                    == BoardSquareType.LETTER) {
+//                    == TrueBoardSquareType.LETTER) {
 //                return false;
 //            }
 //        }
@@ -214,7 +214,7 @@ public class Scrap {
 //
 //        while (previousBoardSquare != null) {
 //            if (previousBoardSquare.getBoardSquareType()
-//                    == BoardSquareType.LETTER) {
+//                    == TrueBoardSquareType.LETTER) {
 //                return leftLimit - 1; // so the left part doesn't touch
 //                // another word
 //            }
@@ -499,7 +499,7 @@ public class Scrap {
 ////                    dimension - 1);
 //
 //            while (getBoardSquareTypeInCheckDirection(CheckDirection.RIGHT)
-//                    == BoardSquareType.LETTER) {
+//                    == TrueBoardSquareType.LETTER) {
 //                nextBoardSquare =
 //                        boardSquareArray[rowColumnIndex][lastLetterIndex];
 //                nextBoardSquare.setHorizontalCheck(false);
@@ -524,7 +524,7 @@ public class Scrap {
 ////                    dimension + 1);
 //
 //            while (getBoardSquareTypeInCheckDirection(CheckDirection.DOWN)
-//                    == BoardSquareType.LETTER) {
+//                    == TrueBoardSquareType.LETTER) {
 //                nextBoardSquare =
 //                        boardSquareArray[lastLetterIndex][rowColumnIndex];
 //                nextBoardSquare.setVerticalCheck(false);
@@ -562,7 +562,7 @@ public class Scrap {
 //            int nextRightIndex = currentRightIndex + 1;
 //
 //            while (boardSquareArray[rowIndex][nextLeftIndex]
-//                    .getBoardSquareType() == BoardSquareType.LETTER) {
+//                    .getBoardSquareType() == TrueBoardSquareType.LETTER) {
 //                if (nextLeftIndex == 0) {
 //                    applyPlayDirectionCorrection(CheckDirection.LEFT,
 //                            boardSquare);
@@ -575,7 +575,7 @@ public class Scrap {
 //            }
 //
 //            while (boardSquareArray[rowIndex][nextRightIndex]
-//                    .getBoardSquareType() == BoardSquareType.LETTER) {
+//                    .getBoardSquareType() == TrueBoardSquareType.LETTER) {
 //                if (nextRightIndex == dimension - 1) {
 //                    break;
 //                }

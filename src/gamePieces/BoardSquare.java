@@ -12,7 +12,7 @@ public class BoardSquare {
 
     private String twoChar;
     private char letter;
-    private BoardSquareType boardSquareType;
+    private TrueBoardSquareType boardSquareType;
     private int rowIndex;
     private int columnIndex;
     private boolean wordHorizontalCheck;
@@ -36,8 +36,14 @@ public class BoardSquare {
     private CrossCheckWord horizontalCrossCheckWord;
     private CrossCheckWord verticalCrossCheckWord;
 
+    // Added a new member variable since there's a difference between a
+    // "possible" (candidate) anchor square and an anchor square that's
+    // actually valid to check (pertaining to if it is a valid anchor square
+    // so there's no repetition)
+    private boolean candidateAnchorSquare;
+
     // DEBUG
-    private final boolean PARSE_BOARD_SQUARE = true;
+    private final boolean PARSE_BOARD_SQUARE = false;
 
     public BoardSquare(String twoChar, int rowIndex, int columnIndex,
                        int dimension, Set<Character> fullLetterSet) {
@@ -77,6 +83,8 @@ public class BoardSquare {
 
         crossCheckHorizontal = false;
         crossCheckVertical = false;
+
+        candidateAnchorSquare = false;
     }
 
     public int getCrossCheckWordIndex(PlayDirection wordPlayDirection) {
@@ -132,7 +140,7 @@ public class BoardSquare {
     private Set<Character> generateCrossCheckSet() {
         Set<Character> copySet = new TreeSet<>();
 
-        if (boardSquareType == BoardSquareType.LETTER) {
+        if (boardSquareType == TrueBoardSquareType.LETTER) {
             copySet.add(letter);
         } else {
             copySet.addAll(fullLetterSet);
@@ -155,7 +163,7 @@ public class BoardSquare {
         if (primaryAnchorType != null &&
                 primaryAnchorType.getInsideOutsideAnchor()
                         == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
-            if (boardSquareType != BoardSquareType.LETTER) { // may seem
+            if (boardSquareType != TrueBoardSquareType.LETTER) { // may seem
                 // redundant, but it's here to check if the OUTSIDE ANCHOR
                 // SQUARE isn't already covered by a tile (no use checking
                 // since only one letter is applicable...)
@@ -170,7 +178,7 @@ public class BoardSquare {
         if (secondaryAnchorType != null &&
                 secondaryAnchorType.getInsideOutsideAnchor()
                         == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
-            if (boardSquareType != BoardSquareType.LETTER) {
+            if (boardSquareType != TrueBoardSquareType.LETTER) {
                 if (playDirection == PlayDirection.HORIZONTAL) {
                     crossCheckHorizontal = true;
                 } else {
@@ -190,10 +198,16 @@ public class BoardSquare {
             System.out.println(secondaryAnchorType);
         }
 
+        if (anchor.isInitialCrossCheck()) {
+            anchor.turnOffInitialCrossCheck();
+        } else {
+            anchor.turnOnAnchorOverlap();
+        }
+
         if (primaryAnchorType != null &&
                 primaryAnchorType.getInsideOutsideAnchor()
                         == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
-            if (boardSquareType != BoardSquareType.LETTER) { // may seem
+            if (boardSquareType != TrueBoardSquareType.LETTER) { // may seem
                 // redundant, but it's here to check if the OUTSIDE ANCHOR
                 // SQUARE isn't already covered by a tile (no use checking
                 // since only one letter is applicable...)
@@ -208,7 +222,7 @@ public class BoardSquare {
         if (secondaryAnchorType != null &&
                 secondaryAnchorType.getInsideOutsideAnchor()
                         == InsideOutsideAnchor.OUTSIDE_ANCHOR) {
-            if (boardSquareType != BoardSquareType.LETTER) {
+            if (boardSquareType != TrueBoardSquareType.LETTER) {
                 if (playDirection == PlayDirection.HORIZONTAL) {
                     crossCheckHorizontal = true;
                 } else {
@@ -265,7 +279,7 @@ public class BoardSquare {
      * @param tile
      */
     public void placeTile(Tile tile) {
-        boardSquareType = BoardSquareType.LETTER;
+        boardSquareType = TrueBoardSquareType.LETTER;
         letter = tile.getLetter();
 
         activeTile = tile;
@@ -395,31 +409,64 @@ public class BoardSquare {
             secondChar = twoChar.charAt(1);
         }
 
+        // assuming the structure given in the project spec that the
+        // multiplier will have a '.' in either of the two allotted spaces
+        // for the board square
         if (firstChar != '.') {
-            if (firstChar == '2') {
-                boardSquareType = BoardSquareType.WORD_MULTIPLIER_2;
-            } else if (firstChar == '3') {
-                boardSquareType = BoardSquareType.WORD_MULTIPLIER_3;
-            } else { // has to be a letter since we're using next() from
-                // scanner (skips the spaces)
-                boardSquareType = BoardSquareType.LETTER;
+//            if (firstChar == '2') {
+//                boardSquareType = BoardSquareType.WORD_MULTIPLIER_2;
+//            } else if (firstChar == '3') {
+//                boardSquareType = BoardSquareType.WORD_MULTIPLIER_3;
+//            } else { // has to be a letter since we're using next() from
+//                // scanner (skips the spaces)
+//                boardSquareType = TrueBoardSquareType.LETTER;
+//                letter = firstChar;
+//                twoChar = " " + letter;
+//            }
+
+            if (firstChar >= '1' && firstChar <= '9') {
+                boardSquareType =
+                        new TrueBoardSquareType(
+                                MultiplierType.WORD_MULTIPLIER,
+                                Character.getNumericValue(
+                                        firstChar));
+            } else {
+                boardSquareType = TrueBoardSquareType.LETTER;
                 letter = firstChar;
                 twoChar = " " + letter;
             }
         } else {
-            if (secondChar == '2') {
-                boardSquareType = BoardSquareType.LETTER_MULTIPLIER_2;
-            } else if (secondChar == '3') {
-                boardSquareType = BoardSquareType.LETTER_MULTIPLIER_3;
-            } else { // has to be a period, which means this square has no
-                // multiplier
-                boardSquareType = BoardSquareType.NO_MULTIPLIER;
+            if (secondChar >= '1' && secondChar <= '9') {
+                boardSquareType =
+                        new TrueBoardSquareType(
+                                MultiplierType.LETTER_MULTIPLIER,
+                                Character.getNumericValue(
+                                        secondChar));
+            } else {
+                boardSquareType = TrueBoardSquareType.NO_MULTIPLIER;
             }
+
+//            if (secondChar == '2') {
+//                boardSquareType = TrueBoardSquareType.LETTER_MULTIPLIER_2;
+//            } else if (secondChar == '3') {
+//                boardSquareType = TrueBoardSquareType.LETTER_MULTIPLIER_3;
+//            } else { // has to be a period, which means this square has no
+//                // multiplier
+//                boardSquareType = BoardSquareType.NO_MULTIPLIER;
+//            }
         }
     }
 
-    public BoardSquareType getBoardSquareType() {
+    public TrueBoardSquareType getBoardSquareType() {
         return boardSquareType;
+    }
+
+    public boolean isCandidateAnchorSquare() {
+        return candidateAnchorSquare;
+    }
+
+    public void turnOnCandidateAnchorSquare() {
+        candidateAnchorSquare = true;
     }
 
     public void printAnchorSquare() {
@@ -430,6 +477,11 @@ public class BoardSquare {
                         anchor.getPrimaryAnchorType()) + " " +
                 AnchorType.customToString(
                         anchor.getSecondaryAnchorType()));
+        System.out.println("Left limit (Horizontal): " +
+                anchor.getLeftLimit(PlayDirection.HORIZONTAL));
+        System.out.println("Left limit (Vertical): " +
+                anchor.getLeftLimit(PlayDirection.VERTICAL));
+        System.out.println("Anchor overlap: " + anchor.isAnchorOverlap());
     }
 
     public void printFullBoardSquareInfo() {

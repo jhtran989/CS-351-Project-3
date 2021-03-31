@@ -12,6 +12,8 @@ public class Rack {
     protected TileBag tileBag;
     private final Scanner scanner;
 
+    private final boolean PRINT_RACK = false;
+
     public Rack(TileBag tileBag, Scanner scanner) {
         this.scanner = scanner;
         //rackMap = new TreeMap<>(new TileComparator());
@@ -20,7 +22,9 @@ public class Rack {
 
         setupRack();
 
-        printRack();
+        if (PRINT_RACK) {
+            printRack();
+        }
     }
 
     public Map<Tile, Character> getRackMap() {

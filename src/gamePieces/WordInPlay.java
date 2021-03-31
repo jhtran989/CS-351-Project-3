@@ -2,6 +2,7 @@ package gamePieces;
 
 import constants.BoardSquareType;
 import constants.PlayDirection;
+import constants.TrueBoardSquareType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +117,7 @@ public class WordInPlay {
             int currentSquareValue = wordBoardSquare.getActiveTile().getValue();
 
             if (wordBoardSquare.isActiveMultiplier()) {
-                BoardSquareType currentBoardSquareType =
+                TrueBoardSquareType currentBoardSquareType =
                         wordBoardSquare.getBoardSquareType();
                 currentSquareValue *=
                         currentBoardSquareType.getLetterMultiplier();

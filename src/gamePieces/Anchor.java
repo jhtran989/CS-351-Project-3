@@ -12,6 +12,11 @@ public class Anchor {
     private int primaryLeftLimit;
     private int secondaryLeftLimit;
     private InsideOutsideAnchor insideOutsideAnchor;
+
+    // New addition (anchor overlap)
+    private boolean initialCrossCheck;
+    private boolean anchorOverlap;
+
 //    private boolean crossCheckHorizontal;
 //    private boolean crossCheckVertical;
 
@@ -36,6 +41,10 @@ public class Anchor {
 
         primaryLeftLimit = 0; // default value...
         secondaryLeftLimit = 0; // default value...
+
+        // probably a better way to do this...
+        initialCrossCheck = true;
+        anchorOverlap = false;
     }
 
 //    public void printCrossChecks() {
@@ -109,5 +118,21 @@ public class Anchor {
 
     public InsideOutsideAnchor getInsideOutsideAnchor() {
         return insideOutsideAnchor;
+    }
+
+    public boolean isAnchorOverlap() {
+        return anchorOverlap;
+    }
+
+    public boolean isInitialCrossCheck() {
+        return initialCrossCheck;
+    }
+
+    public void turnOffInitialCrossCheck() {
+        initialCrossCheck = false;
+    }
+
+    public void turnOnAnchorOverlap() {
+        anchorOverlap = true;
     }
 }

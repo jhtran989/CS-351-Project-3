@@ -9,14 +9,16 @@ import java.util.Scanner;
 
 public class MainWordSolver {
     // ALL DEBUG CHECKS (should move to its own class next time...)
-    public static final boolean BOARD_SETUP = true;
+    public static final boolean BOARD_SETUP = false;
     public static final boolean CHECK_WORDS_IN_PLAY = false;
     public static final boolean PRINT_WORDS_IN_PLAY = false;
     public static final boolean ANCHOR_DEBUG = false;
     public static final boolean LEFT_LIMIT = false;
     public static final boolean CROSS_CHECK_WORD = false;
-    public static final boolean ACTIVE_TILE = false;
+    public static final boolean ACTIVE_TILE = true;
     public static final boolean WORD_RECURSIVE = false;
+    public static final boolean LEFT_PART = false;
+    public static final boolean RIGHT_PART = false;
     public static final boolean CHECK_CROSS_SET_WHEN_FINDING_WORD = false;
     public static final boolean PRINT_CROSS_CHECK_SETS = false;
     public static final boolean PRINT_ANCHOR_BOARD_SQUARES = false;
@@ -27,10 +29,11 @@ public class MainWordSolver {
     public static final boolean PRINT_BASE_SCORE = false;
     public static final boolean PRINT_BINGO = false;
     public static final boolean PRINT_LEGAL_WORD = false;
-    public static final boolean HIGHEST_SCORING_MOVE = false;
-    public static final boolean PRINT_SOLUTION_BOARD = false;
+    public static final boolean HIGHEST_SCORING_MOVE = true;
+    public static final boolean PRINT_SOLUTION_BOARD = true;
 
-    public static final int TARGET_INDEX = 2;
+    public static final int TARGET_ROW_INDEX = 6;
+    public static final int TARGET_COLUMN_INDEX = 10;
 
     public static void main(String[] args) {
         try (Scanner scanner =

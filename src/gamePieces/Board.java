@@ -16,7 +16,7 @@ public class Board {
     private TileBag tileBag;
     private Scanner scanner;
 
-    private final boolean PRINT_BOARD = true;
+    private final boolean PRINT_BOARD = false;
 
     public Board(InputChoice inputChoice, TileBag tileBag, Scanner scanner) {
         this.inputChoice = inputChoice;
@@ -88,7 +88,7 @@ public class Board {
                             tileBag.getFullLetterSet());
 
                     if (boardSquareArray[i][j].getBoardSquareType()
-                            == BoardSquareType.LETTER) {
+                            == TrueBoardSquareType.LETTER) {
                         Tile tile =
                                 tileBag.findTileInFrequencyMap(
                                         boardSquareArray[i][j]
@@ -127,7 +127,7 @@ public class Board {
                             tileBag.getFullLetterSet());
 
                     if (boardSquareArray[i][j].getBoardSquareType()
-                            == BoardSquareType.LETTER) {
+                            == TrueBoardSquareType.LETTER) {
                         Tile tile =
                                 tileBag.findTileInFrequencyMap(
                                         boardSquareArray[i][j]
