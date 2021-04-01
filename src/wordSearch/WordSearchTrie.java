@@ -8,6 +8,10 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+/**
+ * The word search trie that contains characters as its nodes and has methods
+ * to search words in the trie and find a specified node given a certain string
+ */
 public class WordSearchTrie {
     private CharacterNode root;
     private TileBag tileBag;

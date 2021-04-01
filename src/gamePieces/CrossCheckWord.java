@@ -4,9 +4,13 @@ import constants.PlayDirection;
 
 import java.util.List;
 
+/**
+ * An extension of the WordInPlay class that has a few more methods and
+ * member variables to check cross words that are formed (in the opposite
+ * play direction of a given word)
+ */
 public class CrossCheckWord extends WordInPlay {
-    private char finalChar;
-    private int finalCharIndex;
+    private final int finalCharIndex;
     private boolean setFinalChar;
 
     public CrossCheckWord(PlayDirection playDirection, String word,
@@ -16,7 +20,6 @@ public class CrossCheckWord extends WordInPlay {
                 lastIndex, rowColumnIndex,
                 wordBoardSquares);
 
-        finalChar = ' ';
         this.finalCharIndex = finalCharIndex;
         setFinalChar = false;
     }
@@ -35,7 +38,6 @@ public class CrossCheckWord extends WordInPlay {
         word = word.substring(0, finalCharIndex - startWordIndex) + finalChar +
                 word.substring(finalCharIndex - startWordIndex);
 
-        this.finalChar = finalChar;
         setFinalChar = true;
     }
 
@@ -44,7 +46,6 @@ public class CrossCheckWord extends WordInPlay {
                         word.substring(
                                 finalCharIndex - startWordIndex + 1);
 
-        finalChar = ' ';
         setFinalChar = false;
     }
 

@@ -2,6 +2,10 @@ package utilities;
 
 import constants.IndexCode;
 
+/**
+ * Contains static methods relating to finding indices with a given bounds
+ * (and correction)
+ */
 public class CyclicIndexer {
     /**
      * Assuming the bounds is the length to correct (NOT MAX INDEX)

@@ -7,6 +7,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * A meaty class that holds various information about a given board square
+ * (range from position on the board, the letter (if any) it holds with the
+ * corresponding Tile object, the check set used when finding possible words,
+ * etc.)
+ */
 public class BoardSquare {
     private final int NUM_CHAR = 2;
 

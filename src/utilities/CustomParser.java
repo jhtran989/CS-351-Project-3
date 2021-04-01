@@ -2,6 +2,9 @@ package utilities;
 
 import exceptions.InputErrorException;
 
+/**
+ * Holds some basic static methods for general purposes
+ */
 public class CustomParser {
     public static char parseChar(String input) throws InputErrorException {
         if (input.length() != 1) {

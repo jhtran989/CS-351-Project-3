@@ -2,9 +2,14 @@ package wordSearch;
 
 import java.util.*;
 
+/**
+ * The node of the word search tree that contains the letter of the node, the
+ * map of the children, if the node is terminal, and the level in the trie
+ * (starts at 0)
+ */
 public class CharacterNode {
-    private char character;
-    private Map<Character, CharacterNode> childrenMap;
+    private final char character;
+    private final Map<Character, CharacterNode> childrenMap;
     private boolean terminalNode;
     private int level;
 

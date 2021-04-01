@@ -4,6 +4,9 @@ import constants.InputChoice;
 
 import java.util.Scanner;
 
+/**
+ * Main to test out the game pieces
+ */
 public class MainGamePieces {
     public static boolean DEBUG = true;
 

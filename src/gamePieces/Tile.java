@@ -1,5 +1,9 @@
 package gamePieces;
 
+/**
+ * Holds the information for the tile (simple encapsulation of the letter and
+ * value of the tile) and extra static methods to determine blank tiles
+ */
 public class Tile {
     // assuming the character for a blank character is an asterisk '*', which
     // will also be referenced in the WordSolver class to execute the special

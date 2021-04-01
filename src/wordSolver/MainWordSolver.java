@@ -35,6 +35,10 @@ public class MainWordSolver {
     public static final int TARGET_ROW_INDEX = 2;
     public static final int TARGET_COLUMN_INDEX = 8;
 
+    /**
+     * Main for finding the highest scoring solution given an input
+     * @param args
+     */
     public static void main(String[] args) {
         try (Scanner scanner =
                      new Scanner(System.in)) {

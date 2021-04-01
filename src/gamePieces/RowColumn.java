@@ -4,6 +4,10 @@ import constants.CheckDirection;
 import constants.IndexCode;
 import utilities.CyclicIndexer;
 
+/**
+ * An encapsulation of the position on the board that includes the row and
+ * column index of some object
+ */
 public class RowColumn {
     private int rowIndex;
     private int columnIndex;
@@ -15,6 +19,11 @@ public class RowColumn {
         this.dimension = dimension;
     }
 
+    /**
+     * Updates the indices in the given CheckDirection
+     * @param checkDirection
+     * @return
+     */
     public boolean applyCheckDirection(CheckDirection checkDirection) {
         IndexCode rowIndexCode = CyclicIndexer.findAbsoluteIndex(
                 rowIndex, checkDirection.getRowCorrection(),

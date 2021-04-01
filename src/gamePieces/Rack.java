@@ -7,6 +7,10 @@ import java.util.*;
 
 import static gamePieces.Tile.BLANK_LETTER;
 
+/**
+ * The class to hold the rack or tray of a given player's hand (or to hold
+ * the tiles used for the word solver)
+ */
 public class Rack {
     protected Map<Tile, Character> rackMap;
     protected TileBag tileBag;

@@ -8,19 +8,30 @@ import wordSearch.WordSearchTrie;
 
 import java.util.*;
 
+/**
+ * As mentioned in the README, it could have been encapsulated a lot better
+ * (was quite messy to deal with, but most of the dead code should have been
+ * removed)
+ *
+ * More details will be detailed in the README, at least, in terms of the
+ * design and the algorithm for finding the words themselves, but the process
+ * was taken from the paper (also mentioned in the README) and split into
+ * different processes, like finding the words in play, finding the relevant
+ * anchor squares, etc.
+ */
 public class WordSolver {
-    private Board board;
-    private WordSearchTrie wordSearchTrie;
+    private final Board board;
+    private final WordSearchTrie wordSearchTrie;
 
-    private List<WordInPlay> wordInPlayList;
+    private final List<WordInPlay> wordInPlayList;
     private int firstLetterIndex;
     private int lastLetterIndex;
     private int rowColumnLetterIndex;
     private List<BoardSquare> anchorBoardSquaresList;
     private List<BoardSquare> crossCheckBoardSquareWordList;
 
-    private Rack rack;
-    private Map<WordInPlay, Integer> legalWordsMap;
+    private final Rack rack;
+    private final Map<WordInPlay, Integer> legalWordsMap;
 
     // there were problems with object references and recursion in the
     // leftPart() and extendRight() methods, so a new constructor for WordInPlay
@@ -44,12 +55,12 @@ public class WordSolver {
     private BoardSquare currentRightBoardSquare;
 
     //
-    private List<BoardSquare> dummyBoardSquare = new ArrayList<>();
+    private final List<BoardSquare> dummyBoardSquare = new ArrayList<>();
 
     private char currentCharacter;
     private char currentRightmostLeftPartCharacter;
 
-    private Set<Character> fullLetterSet;
+    private final Set<Character> fullLetterSet;
 
     public WordSolver(Board board, WordSearchTrie wordSearchTrie, Rack rack) {
         this.board = board;
@@ -455,29 +466,6 @@ public class WordSolver {
                             currentTile);
                 }
             }
-
-//                for (Map.Entry<Tile, Character> tileCharacterEntry :
-//                        rack.getRackMap().entrySet()) {
-//                    Tile currentTile = tileCharacterEntry.getKey();
-//
-//                    if (Tile.isBlankTile(currentTile)) {
-//                        for (Character letter : fullLetterSet) {
-//                            currentCharacter = letter;
-//
-//                            updateAndRevertLeftPart(leftLimit,
-//                                    anchorSquare,
-//                                    playDirection,
-//                                    currentTile);
-//                        }
-//                    } else {
-//                        currentCharacter = currentTile.getLetter();
-//
-//                        updateAndRevertLeftPart(leftLimit,
-//                                anchorSquare,
-//                                playDirection,
-//                                currentTile);
-//                    }
-//                }
         }
     }
 
@@ -676,29 +664,10 @@ public class WordSolver {
 
                 // FIXME: decided NOT to use currentRightBoardSquare (broke the
                 //  program and I didn't want to mess around to find out why...)
-                BoardSquare nextBoardSquare;
-
-//                if (partialWord.getRightPart().isEmpty()) {
-//                    nextBoardSquare = currentBoardSquare;
-//                } else {
-//                    nextBoardSquare =
-//                            getBoardSquareInCheckDirection(
-//                                    currentBoardSquare,
-//                                    playDirection
-//                                            .getCheckDirection());
-//                }
-
-                nextBoardSquare = currentBoardSquare;
 
                 // FIXME: changed next board square...
-//                nextBoardSquare =
-//                        getBoardSquareInCheckDirection(
-//                                currentBoardSquare,
-//                                playDirection
-//                                        .getCheckDirection());
+                // UPDATE: removed it after closer inspection ()
 
-                // Unwrapped the if statement... (checking next board square
-                // is NOT null)
                 for (Map.Entry<Character, CharacterNode> childNodeEntry
                         : currentNode.getChildrenMap().entrySet()) {
                     currentCharacter = childNodeEntry.getKey();
@@ -766,15 +735,6 @@ public class WordSolver {
                                 System.out.println("Tile: " + currentTile);
                                 System.out.println("Cross set: " + crossCheckSet);
                             }
-
-//                                System.out.println();
-//                                System.out.println("Word: " + partialWord.getWord());
-//                                System.out.println("Word play direction: " +
-//                                        playDirection);
-//                                System.out.println("Current anchor square:");
-//                                currentBoardSquare.printFullBoardSquareInfo();
-//                                System.out.println("Tile: " + currentTile);
-//                                System.out.println("Cross set: " + crossCheckSet);
                         }
 
                         if (crossCheckSet.contains(currentCharacter)) {
@@ -822,10 +782,6 @@ public class WordSolver {
             BoardSquare nextBoardSquare =
                     getBoardSquareInCheckDirection(currentBoardSquare,
                     playDirection.getCheckDirection());
-//            if (nextBoardSquare == null || nextBoardSquare.getBoardSquareType()
-//                    != TrueBoardSquareType.LETTER) {
-//                checkLegalWord(partialWord, currentNode);
-//            }
 
             if (!partialWord.getRightPart().isEmpty()) {
                 checkLegalWord(partialWord, currentNode);
@@ -933,17 +889,6 @@ public class WordSolver {
                                    PlayDirection playDirection,
                                    BoardSquare currentBoardSquare,
                                    Tile currentTile) {
-//        if (partialWord.getRightPart().isEmpty()) {
-//            currentRightBoardSquare = addBoardSquareToDummy(
-//                    currentBoardSquare);
-//        } else {
-//            currentRightBoardSquare = addBoardSquareToDummy(
-//                    getBoardSquareInCheckDirection(
-//                            currentBoardSquare,
-//                            playDirection
-//                                    .getCheckDirection()));
-//        }
-
         // FIXME: Change current right board square... (split it up: below)
         currentRightBoardSquare = addBoardSquareToDummy(
                 currentBoardSquare);
@@ -978,42 +923,12 @@ public class WordSolver {
                         playDirection
                                 .getCheckDirection()));
 
-//        if (currentRightBoardSquare == null) {
-//            currentRightBoardSquare =
-//                    addBoardSquareToDummy(
-//                            currentBoardSquare);
-//        } else {
-//            currentRightBoardSquare =
-//                    addBoardSquareToDummy(
-//                            getBoardSquareInCheckDirection(
-//                                    currentRightBoardSquare,
-//                                    playDirection
-//                                            .getCheckDirection()));
-//        }
-
-//        currentRightBoardSquare =
-//                addBoardSquareToDummy(
-//                        currentBoardSquare);
-
         if (MainWordSolver.WORD_RECURSIVE) {
             System.out.println();
             System.out.println("Current right board " +
                     "square (add): ");
-//            currentRightBoardSquare
-//                    .printFullBoardSquareInfo();
             BoardSquare.printFullBoardSquareInfo(currentBoardSquare);
         }
-
-//            BoardSquare nextBoardSquare =
-//                    getBoardSquareInCheckDirection(
-//                            currentBoardSquare,
-//                            playDirection
-//                                    .getCheckDirection());
-//        currentRightBoardSquare =
-//                getBoardSquareInCheckDirection(
-//                        currentBoardSquare,
-//                        playDirection
-//                                .getCheckDirection());
     }
 
     private void revertRightExtend(WordInPlay partialWord,

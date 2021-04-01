@@ -11,7 +11,7 @@ For this project, I suspect that two late extension days (in addition to the ext
 
 ### Instructions
 
-Fortunately, I was able to make it so that the word solver could exact any number of valid inputs. However, it's important that there are NO next lines before or after each input (copying all four test cases into the word solver should work, at least, at the time of this writing). Also, the word solver will pretty much be running on an infinite loop, so the program would have to be manually closed (force quit or enter end of file character).
+Fortunately, I was able to make it so that the word solver could exact any number of valid inputs. However, it's important that there are NO next lines before or after each input (copying all four test cases into the word solver should work, at least, at the time of this writing). Also, the word solver will pretty much be running on an infinite loop, so the program would have to be manually closed (force quit or enter end of file character). It might throw an exception, but the program should work otherwise (forced the scanner to look for a next line with each new input...). For best performance (so that the output isn't mixed with the input), maybe put in one input case at a time (with the program still running in between inputs, making sure to follow the guidline mentioned above).
 
 There is one thing to note about the fourth test case. My solution provided a word with the same number of points, but with a slightly different word (same orientation on the board, but looking at the output solution yourself should clear things up) -- "Podgeist" instead of "Bodgeist" in the example output (when you let `PRINT_LEGAL_SQUARES` be true, you see that there are a few letters that has the "-odgeist" ending, especially since the first letter is a blank, which could satisfy all those words with that ending).
 
@@ -23,13 +23,23 @@ The `.jar` files are found at the root and can be run with the usual
 ```
 java -jar JAR_NAME
 ```
-where `JAR_NAME` is the name of the jar file. The `.jar` for the word solver is `wordSolver.jar` and the one for the Scrabble GUI is `scrabbleGUI.jar`.
+where `JAR_NAME` is the name of the jar file. The `.jar` file for the word solver is `wordSolver.jar` and the one for the Scrabble GUI is `scrabbleGUI.jar`.
+
+EDIT: Due to time constraints, I wasn't able to start the GUI version, but I hope the word solver should work as intended.
 
 For the input into the word solver, I decided place it in an infinite (while) loop and it will hopefully remove any new line characters in between inputs (`\n`). However, keeping to the format of the input, it assumes all the info for a given input (dimension of board, board itself, and rack) will be grouped together with no blank lines in between the info.
 
 ### Design Overview
 
 A few sketches will be provided alongside the diagrams (same directory: `/doc` at the root of the project) to showcase some of the brainstorming I came up with while coding up the project. It is especially enlightening in terms of how the cross check sets were handled for the applicable anchor squares and how I broke up the types of anchor squares and how to actually find them on a given board. Below, I'll give a summary of my overall design and any brief notes about them.
+
+There were some files and methods scattered throughout that were never used, but were planned to for the GUI version (scrapped due to time constraints, as mentioned above). In the end, I left there as "placeholders" to when I might come back and implement it for fun...
+
+As will be mentioned below, the comment was really rushed this time and only worthwhile methods will be commented (if it can be inferred from the name or is relatively short, then it probably won't be commented due to time constraints).
+
+In the `WordSolver` class, there were a lot of methods that could have been encapsulated to its separate classes, but due to lack of time, was left as is (with placeholders, as mentioned before).
+
+QUICK NOTE: the `leftPart()` updates the NEXT board square (proactively) and the `extendRight()` updates the CURRENT board square (reactively)
 
 #### Data Structure for Word Searching
 

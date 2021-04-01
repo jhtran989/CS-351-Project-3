@@ -4,6 +4,9 @@ package constants;
  * Should be deprecated...since bigger boards are included in the input of
  * the word solver and creating a lot of different multipliers is not ideal...
  * ideal
+ *
+ * EDIT: Created a new TrueBoardSquareType class that allowed for different
+ * objects to be created with custom multipliers
  */
 public enum BoardSquareType {
     LETTER(1, 1),

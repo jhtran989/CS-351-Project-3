@@ -1,5 +1,10 @@
 package constants;
 
+/**
+ * The enum that holds the play direction for a given word (vertical or
+ * horizontal -- also has methods to get the direction of play and the
+ * reverse direction of play as a CheckDirection constant)
+ */
 public enum PlayDirection {
     HORIZONTAL,
     VERTICAL;

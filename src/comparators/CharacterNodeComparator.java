@@ -4,6 +4,9 @@ import wordSearch.CharacterNode;
 
 import java.util.Comparator;
 
+/**
+ * Comparator for the CharacterNode class
+ */
 public class CharacterNodeComparator implements Comparator<CharacterNode> {
     @Override
     public int compare(CharacterNode characterNode1,

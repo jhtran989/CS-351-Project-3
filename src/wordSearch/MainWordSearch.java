@@ -6,6 +6,9 @@ import gamePieces.WordInPlay;
 
 import java.util.*;
 
+/**
+ * Main for testing out the word search trie
+ */
 public class MainWordSearch {
     public static final boolean DEBUG = false;
 

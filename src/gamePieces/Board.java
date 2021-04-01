@@ -9,12 +9,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
+/**
+ * The class that holds the information to construct the board as a 2D array
+ * of BoardSquare objects
+ */
 public class Board {
     private int dimension;
     private BoardSquare[][] boardSquareArray;
     private InputChoice inputChoice;
-    private TileBag tileBag;
-    private Scanner scanner;
+    private final TileBag tileBag;
+    private final Scanner scanner;
 
     private final boolean PRINT_BOARD = false;
 
@@ -105,10 +109,6 @@ public class Board {
                 }
 
                 scanner.nextLine();
-
-//                if (i != dimension - 1) {
-//                    scanner.nextLine();
-//                }
             }
         } catch (InputErrorException | FileNotFoundException exception) {
             System.out.println(exception.getMessage());
@@ -150,10 +150,6 @@ public class Board {
                 }
 
                 scanner.nextLine();
-
-//                if (i != dimension - 1) {
-//                    scanner.nextLine();
-//                }
             }
         } catch (InputErrorException inputErrorException) {
             System.out.println(inputErrorException.getMessage());
@@ -170,8 +166,6 @@ public class Board {
 
             System.out.println();
         }
-
-        //System.out.println();
     }
 
     @Override

@@ -6,6 +6,10 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Comparator for the legal words found in the word solver (sorts by score
+ * first, then by alphabetical order -- case insensitive)
+ */
 public class LegalWordComparator implements
         Comparator<Map.Entry<WordInPlay, Integer>> {
 

@@ -7,6 +7,11 @@ import constants.TrueBoardSquareType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An encapsulation of the words that are going to be played (or already in
+ * play) -- holds some extra information while going through the process of
+ * forming words, like the left and right parts
+ */
 public class WordInPlay {
     protected PlayDirection playDirection;
     protected String word;

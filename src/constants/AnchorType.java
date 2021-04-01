@@ -1,9 +1,9 @@
 package constants;
 
+/**
+ * Enum for the anchor types (more in the README)
+ */
 public enum AnchorType {
-    // FIXME: new revised types (in Board...)
-//    PRIMARY_HEAD(true,
-//            InsideOutsideAnchor.INSIDE_ANCHOR),
     PRIMARY_CENTER_HEAD(true,
             InsideOutsideAnchor.INSIDE_ANCHOR),
     PRIMARY_SIDE_HEAD(true,

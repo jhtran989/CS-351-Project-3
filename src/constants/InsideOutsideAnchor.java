@@ -1,5 +1,8 @@
 package constants;
 
+/**
+ * The first layer of distinction with the anchor types (see the README)
+ */
 public enum InsideOutsideAnchor {
     INSIDE_ANCHOR,
     OUTSIDE_ANCHOR;

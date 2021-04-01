@@ -10,21 +10,23 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
+/**
+ * Holds the information and collection of tiles in the bag used to draw
+ * tiles from
+ */
 public class TileBag {
-    private Map<Tile, Integer> tileFrequency;
-    private Set<Character> fullLetterSet;
-    private InputChoice inputChoice;
+    private final Map<Tile, Integer> tileFrequency;
+    private final Set<Character> fullLetterSet;
     private Scanner scanner;
 
     private final boolean PRINT_TILE_BAG = false;
 
     public TileBag(InputChoice inputChoice, Scanner scanner) {
-        this.inputChoice = inputChoice;
         this.scanner = scanner;
         tileFrequency = new TreeMap<>(new TileComparator());
         fullLetterSet = new TreeSet<>();
 
-        if (this.inputChoice == InputChoice.FILE) {
+        if (inputChoice == InputChoice.FILE) {
             String tilesFilePath = "resources/scrabble_tiles.txt";
 
             setupTiles(tilesFilePath);
@@ -52,6 +54,13 @@ public class TileBag {
         return fullLetterSet;
     }
 
+    /**
+     * Finds the tile in the bag with the given letter (null if not found or
+     * if the bag runs out)
+     *
+     * @param letter
+     * @return
+     */
     public Tile findTileInFrequencyMap(char letter) {
 //        // also allows for capital letters for blank tiles
 //        letter = Character.toLowerCase(letter);
