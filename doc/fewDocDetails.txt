@@ -1,0 +1,2 @@
+As with the previous project, I wasn't able to include some details on the objects described, but 
+they should be mentioned in detail in the respective JavaDoc comments and in the README.
