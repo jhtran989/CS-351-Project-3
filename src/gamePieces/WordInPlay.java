@@ -198,6 +198,10 @@ public class WordInPlay {
         return word.charAt(letterIndex - firstIndex);
     }
 
+    // Overriden both equals() and hashCode() since we don't want duplicate
+    // words...(not really necessary, but helps optimize the list of legal
+    // words)
+
     @Override
     public boolean equals(Object obj) {
         if (obj != null && this.getClass() == obj.getClass()) {
@@ -206,12 +210,19 @@ public class WordInPlay {
             if (this.word.equals(other.word)
                     && this.firstIndex == other.firstIndex
                     && this.lastIndex == other.lastIndex
-                    && this.rowColumnIndex == other.rowColumnIndex) {
+                    && this.rowColumnIndex == other.rowColumnIndex
+                    && this.playDirection == other.playDirection) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return word.hashCode() + firstIndex + lastIndex + rowColumnIndex
+                + playDirection.hashCode();
     }
 
     @Override
