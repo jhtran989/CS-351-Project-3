@@ -7,6 +7,7 @@ import wordSolver.MainWordSolver;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -18,7 +19,7 @@ public class Board {
     private BoardSquare[][] boardSquareArray;
     private InputChoice inputChoice;
     private final TileBag tileBag;
-    private final Scanner scanner;
+    private Scanner scanner;
 
     private final boolean PRINT_BOARD = false;
 
@@ -33,6 +34,18 @@ public class Board {
         } else {
             setupBoard();
         }
+
+        if (PRINT_BOARD) {
+            printBoard();
+        }
+    }
+
+    public Board(TileBag tileBag) {
+        this.tileBag = tileBag;
+
+        setupBoard(new InputStreamReader(
+                MainWordSolver.class.getResourceAsStream(
+                        "/scrabble_board.txt")));
 
         if (PRINT_BOARD) {
             printBoard();
@@ -71,6 +84,48 @@ public class Board {
 
     public int getDimension() {
         return dimension;
+    }
+
+    private void setupBoard(InputStreamReader inputStreamReader) {
+        try (Scanner scanner =
+                     new Scanner(inputStreamReader)) {
+            dimension = CustomParser.parseInt(scanner.nextLine());
+            boardSquareArray = new BoardSquare[dimension][dimension];
+            for (int i = 0; i < dimension; i++) {
+                for (int j = 0; j < dimension; j++) {
+                    String currentString = scanner.next();
+
+//                    if (MainWordSolver.DEBUG) {
+//                        System.out.println(currentString);
+//                    }
+
+                    boardSquareArray[i][j] = new BoardSquare(
+                            currentString, i, j,
+                            dimension,
+                            tileBag.getFullLetterSet());
+
+                    if (boardSquareArray[i][j].getBoardSquareType()
+                            == TrueBoardSquareType.LETTER) {
+                        Tile tile =
+                                tileBag.findTileInFrequencyMap(
+                                        boardSquareArray[i][j]
+                                                .getLetter());
+                        boardSquareArray[i][j].placeTile(tile);
+
+                        if (MainWordSolver.BOARD_SETUP) {
+                            System.out.println();
+                            System.out.println("Setting up letter tile...");
+                            boardSquareArray[i][j].printFullBoardSquareInfo();
+                            System.out.println("Tile: " + tile);
+                        }
+                    }
+                }
+
+                scanner.nextLine();
+            }
+        } catch (InputErrorException exception) {
+            System.out.println(exception.getMessage());
+        }
     }
 
     private void setupBoard(String filePath) {

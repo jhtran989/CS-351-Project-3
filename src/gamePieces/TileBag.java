@@ -5,6 +5,7 @@ import constants.InputChoice;
 import exceptions.InputErrorException;
 import exceptions.InternalError;
 import utilities.CustomParser;
+import wordSolver.MainWordSolver;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -56,6 +57,18 @@ public class TileBag {
         fullLetterSet = new TreeSet<>();
 
         setupTiles(inputStreamReader);
+
+        if (PRINT_TILE_BAG) {
+            printTiles();
+        }
+    }
+    public TileBag() {
+        tileFrequency = new TreeMap<>(new TileComparator());
+        fullLetterSet = new TreeSet<>();
+
+        setupTiles(new InputStreamReader(
+                MainWordSolver.class.getResourceAsStream(
+                        "/scrabble_tiles.txt")));
 
         if (PRINT_TILE_BAG) {
             printTiles();

@@ -5,6 +5,8 @@
 
 ### Introduction
 
+UPDATE: The due date was extended to Sunday, 4/4, and the jar file was just updated just recently so the resources was packaged properly. The GUI version development will now resume (disregard the comments made below about it being scrapped)...
+
 Throughout the `README`, I'll reference the paper by Appel and Jacobson (more information provided in the "Resources" section at the end). For brevity, though, I'll just refer to it as the "paper" and will refer to some of the big ideas presented in it.
 
 For this project, I suspect that two late extension days (in addition to the extension to the original due date) will be needed.
@@ -112,6 +114,10 @@ There was a lot of dead code when I was debugging, which should all be removed a
 
 As a result, the `WordSolver` class was definitely a hefty class with many methods that extended to hundreds of lines of code. Due to time constraints, however, I wasn't able to encapsulate it in the end (like moving the method to find the words in play in one class and moving the one finding all the anchor squares with the cross checks, left limits, etc. in another). So, it may be a little difficult to comb through the code...
 
+### GUI Version
+
+For the maintenance of the GUI elements, the following website really helped in streamlining the process: https://hendrix-cs.github.io/csci151/. Besides the suggestions mentioned on the website, I downloaded Scene Builder from the Gluon webpage (https://gluonhq.com/products/scene-builder/) that really came in handy in optimizing the pane options with a GUI to create another GUI rather than having to code everything, like in the Dominos Project (integration with the `.fxml` file).
+
 ### Assumptions
 
 This would have been an easy fix, but I assumed any dictionary passed into the word trie will only contain lowercase words. Also, I assumed the tiles file used for the game has lowercase letters as well (otherwise, those letters wouldn't be added to the bag of tiles).
@@ -163,3 +169,5 @@ Edit: I faced a similar issue in other methods as well (for example,  `firstPart
 
 The World’s Fastest Scrabble Program by Andrew W. Appel AND Guy J. Jacobson
 (the pdf of the paper will be included in the `resources` directory in the root directory named `scrabbleAppelJacobson.pdf`)
+
+GUI inspiration at https://hendrix-cs.github.io/csci151/
