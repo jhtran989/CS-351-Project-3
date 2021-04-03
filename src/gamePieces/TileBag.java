@@ -8,6 +8,7 @@ import utilities.CustomParser;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.*;
 
 /**
@@ -44,6 +45,17 @@ public class TileBag {
         fullLetterSet = new TreeSet<>();
 
         setupTiles(filePath);
+
+        if (PRINT_TILE_BAG) {
+            printTiles();
+        }
+    }
+
+    public TileBag(InputStreamReader inputStreamReader) {
+        tileFrequency = new TreeMap<>(new TileComparator());
+        fullLetterSet = new TreeSet<>();
+
+        setupTiles(inputStreamReader);
 
         if (PRINT_TILE_BAG) {
             printTiles();
@@ -146,6 +158,29 @@ public class TileBag {
                 scanner.nextLine();
             }
         } catch (InputErrorException | FileNotFoundException exception) {
+            System.out.println(exception.getMessage());
+        }
+    }
+
+    private void setupTiles(InputStreamReader inputStreamReader) {
+        try (Scanner scanner =
+                     new Scanner(inputStreamReader)) {
+            while (scanner.hasNextLine()) {
+                char letter = CustomParser.parseChar(scanner.next());
+                int value = CustomParser.parseInt(scanner.next());
+                int frequency = CustomParser.parseInt(scanner.next());
+                tileFrequency.put(new Tile(letter, value),
+                        frequency);
+
+                // only allow the letters from the alphabet...asterisk almost
+                // got in...
+                if (letter >= 'a' && letter <= 'z') {
+                    fullLetterSet.add(letter);
+                }
+
+                scanner.nextLine();
+            }
+        } catch (InputErrorException exception) {
             System.out.println(exception.getMessage());
         }
     }

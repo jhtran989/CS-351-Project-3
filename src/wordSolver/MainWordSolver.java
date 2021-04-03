@@ -5,6 +5,7 @@ import gamePieces.Rack;
 import gamePieces.TileBag;
 import wordSearch.WordSearchTrie;
 
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 public class MainWordSolver {
@@ -42,11 +43,20 @@ public class MainWordSolver {
     public static void main(String[] args) {
         try (Scanner scanner =
                      new Scanner(System.in)) {
+//            TileBag tileBag = new TileBag(
+//                    "resources/scrabble_tiles.txt");
             TileBag tileBag = new TileBag(
-                    "resources/scrabble_tiles.txt");
+                    new InputStreamReader(
+                            MainWordSolver.class.getResourceAsStream(
+                                    "/scrabble_tiles.txt")));
+
+//            WordSearchTrie wordSearchTrie =
+//                    new WordSearchTrie("resources/sowpods.txt",
+//                            tileBag);
             WordSearchTrie wordSearchTrie =
-                    new WordSearchTrie("resources/sowpods.txt",
-                            tileBag);
+                    new WordSearchTrie(new InputStreamReader(
+                            MainWordSolver.class.getResourceAsStream(
+                                    "/sowpods.txt")), tileBag);
 
             while (true) { // Infinite loop (will not stop until the user
                 // manually quits the program)
@@ -63,8 +73,13 @@ public class MainWordSolver {
                 // Used to refresh the tileBag since tiles are removed from
                 // tileBag when they're placed on the board (will run out
                 // with multiple inputs)
+
+//                tileBag = new TileBag(
+//                        "resources/scrabble_tiles.txt");
                 tileBag = new TileBag(
-                        "resources/scrabble_tiles.txt");
+                        new InputStreamReader(
+                                MainWordSolver.class.getResourceAsStream(
+                                        "/scrabble_tiles.txt")));
             }
         }
     }

@@ -4,6 +4,7 @@ import gamePieces.TileBag;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -24,6 +25,20 @@ public class WordSearchTrie {
         initializeRoot();
 
         setupWordSearchTree(dictionaryFilePath);
+
+//        if (MainWordSearch.DEBUG) {
+//            printTree();
+//        }
+    }
+
+    public WordSearchTrie(InputStreamReader inputStreamReader,
+                          TileBag tileBag) {
+        this.tileBag = tileBag;
+        fullLetterSet = tileBag.getFullLetterSet();
+
+        initializeRoot();
+
+        setupWordSearchTree(inputStreamReader);
 
 //        if (MainWordSearch.DEBUG) {
 //            printTree();
@@ -289,6 +304,29 @@ public class WordSearchTrie {
             }
         } catch (FileNotFoundException fileNotFoundException) {
             System.out.println(fileNotFoundException.getMessage());
+        }
+
+        if (MainWordSearch.DEBUG) {
+            System.out.println("Finished setting up word trie...");
+        }
+    }
+
+    private void setupWordSearchTree(InputStreamReader inputStreamReader) {
+        if (MainWordSearch.DEBUG) {
+            System.out.println("Setting up the word search trie...");
+        }
+
+        try (Scanner scanner = new Scanner(
+                inputStreamReader)) {
+            while (scanner.hasNext()) {
+                String word = scanner.next();
+
+//                if (MainWordSearch.DEBUG) {
+//                    System.out.println("word: " + word);
+//                }
+
+                addWord(word);
+            }
         }
 
         if (MainWordSearch.DEBUG) {

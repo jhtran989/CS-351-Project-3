@@ -8,10 +8,30 @@ import gamePieces.BoardSquare;
 import gamePieces.MainGamePieces;
 import gamePieces.WordInPlay;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Scrap {
+
+    public static void main(String[] args) throws FileNotFoundException {
+        File fileTest = new File(String.valueOf(
+                Scrap.class.getResourceAsStream("/animals.txt")));
+        System.out.println(fileTest.exists());
+        System.out.println(String.valueOf(
+                Scrap.class.getResource("/animals.txt")));
+        InputStreamReader inputStreamReader =
+                new InputStreamReader(Scrap.class.getResourceAsStream("/animals.txt"));
+        Scanner scanner = new Scanner(inputStreamReader);
+        System.out.println(scanner.nextLine());
+        System.out.println(scanner.nextLine());
+        System.out.println(scanner.nextLine());
+        System.out.println(scanner.nextLine());
+    }
 
     //    // TODO: fix so that the board squares will temporarily have active tiles
 //    //  on them just to calculate the score and find the best move...
