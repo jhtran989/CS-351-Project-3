@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Holds the information and collection of tiles in the bag used to draw
@@ -20,6 +21,9 @@ public class TileBag {
     private final Map<Tile, Integer> tileFrequency;
     private final Set<Character> fullLetterSet;
     private Scanner scanner;
+
+    private static final ThreadLocalRandom threadLocalRandom =
+            ThreadLocalRandom.current();
 
     private final boolean PRINT_TILE_BAG = false;
 
@@ -213,6 +217,20 @@ public class TileBag {
         } catch (InputErrorException inputErrorException) {
             System.out.println(inputErrorException.getMessage());
         }
+    }
+
+    public Tile getRandomTile() {
+        List<Tile> tileList = new ArrayList<>(tileFrequency.keySet());
+        int randomIndex = threadLocalRandom.nextInt(tileFrequency.size());
+        Tile randomTile = tileList.get(randomIndex);
+
+        int randomFrequency = tileFrequency.get(randomTile);
+        // if there are no of that specific tile in the tile bag
+        if (randomFrequency - 1 < 0) {
+            return null;
+        }
+
+        return randomTile;
     }
 
     private void printTiles() {

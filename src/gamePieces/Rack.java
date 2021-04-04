@@ -1,6 +1,5 @@
 package gamePieces;
 
-import comparators.TileComparator;
 import wordSolver.MainWordSolver;
 
 import java.util.*;
@@ -14,9 +13,10 @@ import static gamePieces.Tile.BLANK_LETTER;
 public class Rack {
     protected Map<Tile, Character> rackMap;
     protected TileBag tileBag;
-    private final Scanner scanner;
+    private Scanner scanner;
 
     private final boolean PRINT_RACK = false;
+    public static int RACK_SIZE = 7;
 
     public Rack(TileBag tileBag, Scanner scanner) {
         this.scanner = scanner;
@@ -24,7 +24,18 @@ public class Rack {
         rackMap = new LinkedHashMap<>();
         this.tileBag = tileBag;
 
-        setupRack();
+        setupRackConsole();
+
+        if (PRINT_RACK) {
+            printRack();
+        }
+    }
+
+    public Rack(TileBag tileBag) {
+        this.tileBag = tileBag;
+        rackMap = new LinkedHashMap<>();
+
+        setupRackGUI();
 
         if (PRINT_RACK) {
             printRack();
@@ -74,7 +85,7 @@ public class Rack {
     //  duplicates,
     //  and maybe change .equals()
     //  for Tiles...)
-    private void setupRack() {
+    private void setupRackConsole() {
         String rackLetters = "empty";
         if (scanner.hasNextLine()) {
             rackLetters = scanner.nextLine();
@@ -91,10 +102,20 @@ public class Rack {
             // a new Tile object is created to account for the fact that the
             // tiles are "decoupled" once removed from the bag of tiles and
             // to account for the possibility that multiple tiles with the same
-            // letter can be added to the rack ()
+            // letter can be added to the rack
             Tile newTile = new Tile(currentTile);
 
             rackMap.put(newTile, currentLetter);
+        }
+    }
+
+    private void setupRackGUI() {
+        for (int i = 0; i < RACK_SIZE; i++) {
+            Tile currentTile = tileBag.getRandomTile();
+            Tile newTile = new Tile(currentTile);
+            newTile.setTileImage();
+
+            rackMap.put(newTile, newTile.getLetter());
         }
     }
 

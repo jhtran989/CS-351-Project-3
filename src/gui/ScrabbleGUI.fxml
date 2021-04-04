@@ -3,9 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-
 
 <BorderPane xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ScrabbleGUIController">
    <center>
@@ -46,4 +46,15 @@
          </padding>
       </VBox>
    </top>
+   <bottom>
+      <VBox fx:id="humanRackVBox" alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Human Tray (Rack)" />
+            <HBox fx:id="humanRackHBox" alignment="TOP_CENTER" />
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
+      </VBox>
+   </bottom>
 </BorderPane>
