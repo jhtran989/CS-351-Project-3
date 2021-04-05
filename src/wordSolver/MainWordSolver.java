@@ -29,9 +29,11 @@ public class MainWordSolver {
     public static final boolean PRINT_CROSS_SCORE = false;
     public static final boolean PRINT_BASE_SCORE = false;
     public static final boolean PRINT_BINGO = false;
-    public static final boolean PRINT_LEGAL_WORD = false;
+    public static final boolean PRINT_LEGAL_WORD = true;
     public static final boolean HIGHEST_SCORING_MOVE = false;
     public static final boolean PRINT_SOLUTION_BOARD = false;
+
+    public static final boolean PRINT_HUMAN_WORD_IN_PLAY = true;
 
     public static final int TARGET_ROW_INDEX = 2;
     public static final int TARGET_COLUMN_INDEX = 8;

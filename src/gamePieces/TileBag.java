@@ -227,6 +227,9 @@ public class TileBag {
         int randomFrequency = tileFrequency.get(randomTile);
         // if there are no of that specific tile in the tile bag
         if (randomFrequency - 1 < 0) {
+            // removes that tile from the tile bag so there isn't an infinite
+            // loop that occurs when we run out of tiles...
+            tileFrequency.remove(randomTile);
             return null;
         }
 

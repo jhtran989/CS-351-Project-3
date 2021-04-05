@@ -109,14 +109,38 @@ public class Rack {
         }
     }
 
+    /**
+     * Gets a random tile from the tile bag (since this is just a setup, we
+     * can just use a while loop to get tiles still in the bag)
+     */
     private void setupRackGUI() {
         for (int i = 0; i < RACK_SIZE; i++) {
             Tile currentTile = tileBag.getRandomTile();
+
+            while (currentTile == null) {
+                currentTile = tileBag.getRandomTile();
+            }
+
             Tile newTile = new Tile(currentTile);
             newTile.setTileImage();
 
             rackMap.put(newTile, newTile.getLetter());
         }
+    }
+
+    public Tile addRandomTile() {
+        Tile currentTile = tileBag.getRandomTile();
+
+        while (currentTile == null) {
+            currentTile = tileBag.getRandomTile();
+        }
+
+        Tile newTile = new Tile(currentTile);
+        newTile.setTileImage();
+
+        rackMap.put(newTile, newTile.getLetter());
+
+        return newTile;
     }
 
     public void printRack() {

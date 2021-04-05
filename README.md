@@ -118,6 +118,18 @@ As a result, the `WordSolver` class was definitely a hefty class with many metho
 
 For the maintenance of the GUI elements, the following website really helped in streamlining the process: https://hendrix-cs.github.io/csci151/. Besides the suggestions mentioned on the website, I downloaded Scene Builder from the Gluon webpage (https://gluonhq.com/products/scene-builder/) that really came in handy in optimizing the pane options with a GUI to create another GUI rather than having to code everything, like in the Dominos Project (integration with the `.fxml` file).
 
+There were some nifty features added (like being able to drag and snap the tile images to the board squares) &mdash; ONLY works with the DEFAULT window size I configured...
+
+EDIT: Actually, resizing the window now shouldn't affect the positioning of the tiles on the board (keeping everything left aligned helped so that the positioning relative to the scene didn't change).
+
+There were some pieces of code that were altered slightly to account for the human player's turn. So, I decided to split up the procedure of the word solver by moving the initial preliminary search with the human player's turn so easy calculations could be done with their turn and leaving the actual word generation to the computer player's turn.
+
+Internally, the tile images are stored in an `HBox` object, but considering that the images have to stay in the `HBox` object after they have been "played" on the board, the size of images contained in the `HBox` is not quite the same as the actual number of tiles in the human player's rack...(furthermore, the computer player's played tiles will be added to the same `HBox` &mdash; only way for me to get them to show without having to create another container).
+
+The right side of the window will have all the necessary information (score info and words and play button).
+
+EDIT: I realized that I forgot to "clear" and "reset" everything in between turns of the human and computer player (there still might be errors, though).
+
 ### Assumptions
 
 This would have been an easy fix, but I assumed any dictionary passed into the word trie will only contain lowercase words. Also, I assumed the tiles file used for the game has lowercase letters as well (otherwise, those letters wouldn't be added to the bag of tiles).
@@ -139,6 +151,12 @@ Also, any get and set methods are generally inferable, so they won't be commente
 In the `class WordSovler`, I didn't have enough time to account for the possibility that any given board square can be represented as different anchor squares from DIFFERENT reference word (i.e. more than one word shares the same anchor square, though not necessarily the same type). So, there are words that the solver probably doesn't account for...
 
 EDIT: That should be fixed now, but there seems to be duplicate words added (only when the end of the board is reached, as mentioned above).
+
+EDIT: With the extension, the GUI version was started and for now, BLANK tiles don't work as expected (only for the human player since there would have to be some option for each blank tile so the user can select which letter it would represent) and can't be fixed due to time constraints.
+
+The computer player can somtimes play the same word twice if both times, the word is the highest scoring move &mdash; there are good number of issues when transferring to and from the GUI version with the internal representation. A prominent issue is the computer player's words shift with each turn (working with a `VBox` instead of an `HBox` might the issue when comparing with the human player...). Also, exception errors might occur after the first turn (again, I didn't occur these issues in the plain word solver).
+
+There are also times when the play button freezes (occasional)...
 
 ### Afternotes
 

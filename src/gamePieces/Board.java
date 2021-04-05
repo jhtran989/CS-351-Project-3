@@ -223,6 +223,19 @@ public class Board {
         }
     }
 
+    public void printBoardGUI() {
+        System.out.println("Board");
+
+        for (BoardSquare[] boardSquares : boardSquareArray) {
+            for (BoardSquare boardSquare : boardSquares) {
+                System.out.print((boardSquare.getActiveTile() == null ? 0 :
+                        1) + " ");
+            }
+
+            System.out.println();
+        }
+    }
+
     @Override
     public String toString() {
         String boardString = "";
