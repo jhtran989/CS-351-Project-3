@@ -30,10 +30,10 @@ import java.util.Map;
 
 public class ScrabbleGUIController {
     private static final boolean GUI_DEBUG = false;
-    private static final boolean BOARD_GUI = true;
-    public static final boolean CROSS_CHECK_GUI = true;
-    public static final boolean COMPUTER_TILE_GUI = true;
-    public static final boolean PRINT_COMPUTER_GUI_SOLUTION = true;
+    private static final boolean BOARD_GUI = false;
+    public static final boolean CROSS_CHECK_GUI = false;
+    public static final boolean COMPUTER_TILE_GUI = false;
+    public static final boolean PRINT_COMPUTER_GUI_SOLUTION = false;
 
     @FXML
     Pane pane;

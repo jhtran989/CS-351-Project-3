@@ -29,7 +29,7 @@ public class MainWordSolver {
     public static final boolean PRINT_CROSS_SCORE = false;
     public static final boolean PRINT_BASE_SCORE = false;
     public static final boolean PRINT_BINGO = false;
-    public static final boolean PRINT_LEGAL_WORD = true;
+    public static final boolean PRINT_LEGAL_WORD = false;
     public static final boolean HIGHEST_SCORING_MOVE = false;
     public static final boolean PRINT_SOLUTION_BOARD = false;
 

@@ -116,6 +116,8 @@ As a result, the `WordSolver` class was definitely a hefty class with many metho
 
 ### GUI Version
 
+IMPORTANT: The code does not check to see if the use plays a valid word (very little restrictions because of time...). Also, I don't check if the user plays a single letter word...
+
 For the maintenance of the GUI elements, the following website really helped in streamlining the process: https://hendrix-cs.github.io/csci151/. Besides the suggestions mentioned on the website, I downloaded Scene Builder from the Gluon webpage (https://gluonhq.com/products/scene-builder/) that really came in handy in optimizing the pane options with a GUI to create another GUI rather than having to code everything, like in the Dominos Project (integration with the `.fxml` file).
 
 There were some nifty features added (like being able to drag and snap the tile images to the board squares) &mdash; ONLY works with the DEFAULT window size I configured...
@@ -129,6 +131,10 @@ Internally, the tile images are stored in an `HBox` object, but considering that
 The right side of the window will have all the necessary information (score info and words and play button).
 
 EDIT: I realized that I forgot to "clear" and "reset" everything in between turns of the human and computer player (there still might be errors, though).
+
+Edit 2: Now the tiles pieces from the human player have started to move...(need a better way than just putting them in a `HBox` or `VBox`...)
+
+Edit 3: There were a few situations where the computer player wasn't able to play a valid word...(an exception was thrown)
 
 ### Assumptions
 
