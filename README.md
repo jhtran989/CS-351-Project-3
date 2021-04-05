@@ -116,7 +116,9 @@ As a result, the `WordSolver` class was definitely a hefty class with many metho
 
 ### GUI Version
 
-IMPORTANT: The code does not check to see if the use plays a valid word (very little restrictions because of time...). Also, I don't check if the user plays a single letter word...
+IMPORTANT: The code does not check to see if the use plays a valid word (very little restrictions because of time...). Also, I don't check if the user plays a single letter word...The end game was nonexistent for this version.
+
+PERSONAL NOTE: I realized there where other variables that I needed to reset (like the cross checks and the cross check sets), and that the tiles could just be added to the board PANE...now that I think about it, the cross checks not being reset really mess up the program.
 
 For the maintenance of the GUI elements, the following website really helped in streamlining the process: https://hendrix-cs.github.io/csci151/. Besides the suggestions mentioned on the website, I downloaded Scene Builder from the Gluon webpage (https://gluonhq.com/products/scene-builder/) that really came in handy in optimizing the pane options with a GUI to create another GUI rather than having to code everything, like in the Dominos Project (integration with the `.fxml` file).
 
